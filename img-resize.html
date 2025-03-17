@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Resize images online for free. Adjust image dimensions while maintaining quality. Choose custom width, height, and aspect ratio.">
+  <meta name="keywords" content="image resizer, resize images, image dimensions, free image resizer, batch resizing">
+  <meta name="author" content="Your Website Name">
+  <title>Free Image Resizer Tool - Resize Images Online</title>
+  <style>
+    /* General Styles */
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+      color: #333;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-top: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #4a90e2;
+    }
+
+    .upload-section, .options-section, .output-section {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    input[type="file"], input[type="number"], select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    input[type="number"]:invalid {
+      border-color: #ff0000;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background: #4a90e2;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .btn:hover {
+      background: #357abd;
+    }
+
+    .btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .output-section {
+      text-align: center;
+    }
+
+    .output-section p {
+      font-size: 1.1rem;
+      margin: 10px 0;
+    }
+
+    .preview-section {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .preview-section img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .ad-banner {
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .btn {
+        font-size: 14px;
+      }
+    }
+  </style>
+  <!-- Google AdSense Script -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_AD_SENSE_ID" crossorigin="anonymous"></script>
+  <!-- JSZip Library for ZIP download -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+  <!-- FileSaver.js for saving files -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Image Resizer Tool</h1>
+      <p>Resize images online for free. Adjust image dimensions while maintaining quality.</p>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <!-- AdSense Banner Ad -->
+      <div class="ad-banner">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_AD_SENSE_ID" crossorigin="anonymous"></script>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-YOUR_AD_SENSE_ID"
+             data-ad-slot="BANNER_AD_SLOT_ID"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      </div>
+
+      <!-- Upload Section -->
+      <div class="upload-section">
+        <label for="image-upload">Upload Image(s):</label>
+        <input type="file" id="image-upload" accept="image/*" multiple>
+      </div>
+
+      <!-- Resize Options -->
+      <div class="options-section">
+        <label for="resize-width">Resize Width (px):</label>
+        <input type="number" id="resize-width" placeholder="Enter width in pixels" min="1">
+
+        <label for="resize-height">Resize Height (px):</label>
+        <input type="number" id="resize-height" placeholder="Enter height in pixels" min="1">
+
+        <label for="aspect-ratio-lock">Lock Aspect Ratio:</label>
+        <input type="checkbox" id="aspect-ratio-lock" checked>
+
+        <label for="quality">Quality (0.1 to 1.0):</label>
+        <input type="number" id="quality" placeholder="Enter quality (0.1 to 1.0)" min="0.1" max="1.0" step="0.1" value="0.9">
+
+        <label for="output-format">Output Format:</label>
+        <select id="output-format">
+          <option value="image/jpeg">JPEG</option>
+          <option value="image/png">PNG</option>
+          <option value="image/webp">WebP</option>
+        </select>
+      </div>
+
+      <!-- Resize Button -->
+      <button class="btn" id="resize-btn">Resize Image(s)</button>
+
+      <!-- Download All Button -->
+      <button class="btn" id="download-all-btn" style="display: none;">Download All Resized Images</button>
+
+      <!-- Preview Section -->
+      <div class="preview-section">
+        <img id="preview-image" src="#" alt="Resized Image Preview" style="display: none;">
+      </div>
+
+      <!-- Output Section -->
+      <div class="output-section">
+        <p id="original-size"></p>
+        <p id="resized-size"></p>
+        <a id="download-link" style="display: none;">Download Resized Image</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2023 Free Online Tools. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // JavaScript for Image Resizing
+    const resizeBtn = document.getElementById('resize-btn');
+    const downloadAllBtn = document.getElementById('download-all-btn');
+    const imageUploadInput = document.getElementById('image-upload');
+    const resizeWidthInput = document.getElementById('resize-width');
+    const resizeHeightInput = document.getElementById('resize-height');
+    const aspectRatioLock = document.getElementById('aspect-ratio-lock');
+    const qualityInput = document.getElementById('quality');
+    const outputFormatSelect = document.getElementById('output-format');
+    const previewImage = document.getElementById('preview-image');
+    const originalSizeDisplay = document.getElementById('original-size');
+    const resizedSizeDisplay = document.getElementById('resized-size');
+    const downloadLink = document.getElementById('download-link');
+
+    let originalWidth, originalHeight;
+    let resizedImages = [];
+
+    // Update height when width changes (if aspect ratio is locked)
+    resizeWidthInput.addEventListener('input', function () {
+      if (aspectRatioLock.checked && originalWidth && originalHeight) {
+        const newWidth = parseInt(this.value);
+        const newHeight = Math.round((newWidth / originalWidth) * originalHeight);
+        resizeHeightInput.value = newHeight;
+      }
+    });
+
+    // Update width when height changes (if aspect ratio is locked)
+    resizeHeightInput.addEventListener('input', function () {
+      if (aspectRatioLock.checked && originalWidth && originalHeight) {
+        const newHeight = parseInt(this.value);
+        const newWidth = Math.round((newHeight / originalHeight) * originalWidth);
+        resizeWidthInput.value = newWidth;
+      }
+    });
+
+    // Handle image upload
+    imageUploadInput.addEventListener('change', function () {
+      const file = this.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function (event) {
+        const img = new Image();
+        img.src = event.target.result;
+
+        img.onload = function () {
+          originalWidth = img.width;
+          originalHeight = img.height;
+
+          // Set initial dimensions
+          resizeWidthInput.value = originalWidth;
+          resizeHeightInput.value = originalHeight;
+
+          // Show preview
+          previewImage.src = img.src;
+          previewImage.style.display = 'block';
+        };
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // Resize image(s)
+    resizeBtn.addEventListener('click', function () {
+      const files = imageUploadInput.files;
+      if (files.length === 0) {
+        alert('Please upload at least one image.');
+        return;
+      }
+
+      const width = parseInt(resizeWidthInput.value);
+      const height = parseInt(resizeHeightInput.value);
+      const quality = parseFloat(qualityInput.value);
+      const outputFormat = outputFormatSelect.value;
+
+      if (!width || !height || width <= 0 || height <= 0) {
+        alert('Please enter valid width and height values.');
+        return;
+      }
+
+      if (quality < 0.1 || quality > 1.0) {
+        alert('Please enter a valid quality value (0.1 to 1.0).');
+        return;
+      }
+
+      resizedImages = []; // Reset resized images array
+
+      // Process each file
+      Array.from(files).forEach((file, index) => {
+        const reader = new FileReader();
+        reader.onload = function (event) {
+          const img = new Image();
+          img.src = event.target.result;
+
+          img.onload = function () {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            // Set canvas dimensions to the desired size
+            canvas.width = width;
+            canvas.height = height;
+
+            // Draw the image on the canvas with the new dimensions
+            ctx.drawImage(img, 0, 0, width, height);
+
+            // Convert canvas to a Blob
+            canvas.toBlob(function (blob) {
+              // Display original and resized sizes
+              originalSizeDisplay.innerText = `Original Size: ${(file.size / 1024).toFixed(2)} KB`;
+              resizedSizeDisplay.innerText = `Resized Size: ${(blob.size / 1024).toFixed(2)} KB`;
+
+              // Show preview
+              previewImage.src = URL.createObjectURL(blob);
+              previewImage.style.display = 'block';
+
+              // Create download link
+              downloadLink.href = URL.createObjectURL(blob);
+              downloadLink.download = `resized-${file.name}`;
+              downloadLink.style.display = 'block';
+
+              // Add resized image to array
+              resizedImages.push({ blob, name: `resized-${file.name}` });
+
+              // Show "Download All" button if multiple images are resized
+              if (resizedImages.length > 1) {
+                downloadAllBtn.style.display = 'block';
+              }
+            }, outputFormat, quality);
+          };
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+
+    // Download all resized images as a ZIP file
+    downloadAllBtn.addEventListener('click', function () {
+      const zip = new JSZip();
+      resizedImages.forEach((image, index) => {
+        zip.file(image.name, image.blob);
+      });
+
+      zip.generateAsync({ type: 'blob' }).then(function (content) {
+        saveAs(content, 'resized-images.zip');
+      });
+    });
+  </script>
+</body>
+</html>
