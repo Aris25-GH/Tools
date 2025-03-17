@@ -1,509 +1,335 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Discover a wide range of online tools for image and PDF processing. Compress, convert, and optimize your files with ease.">
-    <meta name="keywords" content="image tools, PDF tools, online tools, file compression, file conversion">
-    <meta name="author" content="Your Name">
-    <title>Online Tools - Image & PDF Tools</title>
-    <!-- Font Awesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Google AdSense -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_AD_UNIT_ID" crossorigin="anonymous"></script>
-    <style>
-        /* CSS Reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Free online tools for image and PDF processing, file conversion, QR code generation, and more. Optimized for all devices.">
+  <meta name="keywords" content="image compression, PDF compression, image resizer, PDF merger, image converter, PDF splitter, QR code generator, file converter, password generator, PDF comparer, PDF searchable text">
+  <meta name="author" content="Your Website Name">
+  <title>Online Tools - Image, PDF, and File Utilities</title>
+  <style>
+    /* General Styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+      color: #333;
+    }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f9f9f9;
-            color: #333;
-            line-height: 1.6;
-        }
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
 
-        /* Header */
-        header {
-            background-color: #4CAF50;
-            color: white;
-            padding: 20px 0;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
+    /* Header */
+    header {
+      background: #007BFF;
+      color: #fff;
+      padding: 20px 0;
+      text-align: center;
+    }
 
-        header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
+    header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+    }
 
-        header p {
-            font-size: 1.1rem;
-        }
+    header p {
+      margin: 10px 0 0;
+      font-size: 1.2rem;
+    }
 
-        /* Navigation */
-        nav {
-            background-color: #333;
-            padding: 10px;
-            text-align: center;
-        }
+    /* Navigation */
+    nav {
+      background: #333;
+      padding: 10px 0;
+    }
 
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin: 0 15px;
-            font-size: 1.1rem;
-            transition: color 0.3s ease;
-        }
+    nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+    }
 
-        nav a:hover {
-            color: #4CAF50;
-        }
+    nav ul li {
+      margin: 0 15px;
+    }
 
-        /* Tools Section */
-        .tools {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            padding: 40px 20px;
-        }
+    nav ul li a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.1rem;
+    }
 
-        .tool-card {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            text-align: center;
-            transition: transform 0.3s ease;
-            padding: 20px;
-        }
+    nav ul li a.active {
+      font-weight: bold;
+      border-bottom: 2px solid #007BFF;
+    }
 
-        .tool-card:hover {
-            transform: translateY(-10px);
-        }
+    /* Tool Sections */
+    .tool-section {
+      padding: 40px 0;
+    }
 
-        .tool-card i {
-            font-size: 3rem;
-            color: #4CAF50;
-            margin-bottom: 15px;
-        }
+    .tool-section h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 2rem;
+    }
 
-        .tool-card h3 {
-            font-size: 1.5rem;
-            margin: 15px 0;
-        }
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
 
-        .tool-card p {
-            padding: 0 15px 20px;
-            color: #666;
-        }
+    .tool-card {
+      background: #f9f9f9;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      transition: transform 0.3s ease;
+      text-decoration: none;
+      color: inherit;
+    }
 
-        .tool-card input[type="file"] {
-            margin: 10px 0;
-        }
+    .tool-card:hover {
+      transform: translateY(-10px);
+    }
 
-        .tool-card button {
-            display: inline-block;
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+    .tool-card h3 {
+      margin: 0 0 10px;
+      font-size: 1.5rem;
+    }
 
-        .tool-card button:hover {
-            background-color: #45a049;
-        }
+    .tool-card p {
+      margin: 0;
+      color: #666;
+    }
 
-        .file-size {
-            margin-top: 15px;
-            font-weight: bold;
-        }
+    /* Footer */
+    footer {
+      background: #333;
+      color: #fff;
+      text-align: center;
+      padding: 20px 0;
+      margin-top: 40px;
+    }
 
-        .advanced-options {
-            display: none;
-            margin-top: 15px;
-        }
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      nav ul {
+        flex-direction: column;
+        align-items: center;
+      }
 
-        .advanced-options label {
-            display: block;
-            margin: 10px 0 5px;
-            font-weight: bold;
-        }
+      nav ul li {
+        margin: 10px 0;
+      }
 
-        .advanced-options input,
-        .advanced-options select {
-            width: 100%;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            margin-bottom: 10px;
-        }
-
-        /* Ad Spaces */
-        .ad-space {
-            margin: 20px auto;
-            text-align: center;
-            padding: 10px;
-            background-color: #f1f1f1;
-            border-radius: 10px;
-        }
-
-        /* Footer */
-        footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 20px 0;
-            margin-top: 40px;
-        }
-
-        footer p {
-            margin: 0;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            header h1 {
-                font-size: 2rem;
-            }
-
-            .tools {
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            }
-        }
-
-        @media (max-width: 480px) {
-            nav a {
-                display: block;
-                margin: 10px 0;
-            }
-
-            .tool-card h3 {
-                font-size: 1.3rem;
-            }
-        }
-    </style>
+      .tool-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  <!-- Google AdSense Code -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_AD_UNIT_ID" crossorigin="anonymous"></script>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <h1>Online Tools</h1>
-        <p>Your one-stop solution for image and PDF processing.</p>
-    </header>
-
-    <!-- Navigation -->
-    <nav>
-        <a href="#all-tools" onclick="filterTools('all')">All Tools</a>
-        <a href="#image-tools" onclick="filterTools('image')">Image Tools</a>
-        <a href="#pdf-tools" onclick="filterTools('pdf')">PDF Tools</a>
-        <a href="#other-tools" onclick="filterTools('other')">Other Tools</a>
-    </nav>
-
-    <!-- Ad Space 1 -->
-    <div class="ad-space">
-        <!-- Google AdSense Ad Unit -->
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-YOUR_AD_UNIT_ID"
-             data-ad-slot="YOUR_AD_SLOT_ID"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
+  <header>
+    <div class="container">
+      <h1>Online Tools</h1>
+      <p>Your one-stop solution for image, PDF, and file utilities.</p>
     </div>
+  </header>
 
-    <!-- Tools Section -->
-    <section class="tools">
-        <!-- Image Compression -->
-        <div class="tool-card image-tool">
-            <i class="fas fa-file-image"></i>
-            <h3>Image Compression</h3>
-            <p>Compress images to reduce file size without losing quality.</p>
-            <input type="file" id="image-upload" accept="image/*">
-            <div class="file-size" id="image-file-size"></div>
-            <div class="advanced-options">
-                <label for="compression-level">Compression Level:</label>
-                <select id="compression-level">
-                    <option value="0.1">Low</option>
-                    <option value="0.5" selected>Medium</option>
-                    <option value="0.9">High</option>
-                </select>
-            </div>
-            <button id="compress-image-btn">Compress Image</button>
-            <div class="file-size" id="compressed-image-file-size"></div>
-            <a href="/img-compression.html">Go To Image Tools</a>
-        </div>
-
-        <!-- PDF Compression -->
-        <div class="tool-card pdf-tool">
-            <i class="fas fa-file-pdf"></i>
-            <h3>PDF Compression</h3>
-            <p>Compress PDF files to reduce their size.</p>
-            <input type="file" id="pdf-upload" accept="application/pdf">
-            <div class="file-size" id="pdf-file-size"></div>
-            <div class="advanced-options">
-                <label for="pdf-size">Select Desired PDF Size:</label>
-                <select id="pdf-size">
-                    <option value="0.5">500 KB</option>
-                    <option value="1">1 MB</option>
-                    <option value="2">2 MB</option>
-                </select>
-            </div>
-            <button id="compress-pdf-btn">Compress PDF</button>
-            <div class="file-size" id="compressed-pdf-file-size"></div>
-            <a href="#pdf-tools">Go To PDF Tools</a>
-        </div>
-
-        <!-- Image Resizer -->
-        <div class="tool-card image-tool">
-            <i class="fas fa-expand-arrows-alt"></i>
-            <h3>Image Resizer</h3>
-            <p>Resize images to your desired dimensions.</p>
-            <input type="file" id="resize-image-upload" accept="image/*">
-            <div class="file-size" id="resize-image-file-size"></div>
-            <div class="advanced-options">
-                <label for="resize-width">Width (px):</label>
-                <input type="number" id="resize-width" placeholder="Enter width">
-                <label for="resize-height">Height (px):</label>
-                <input type="number" id="resize-height" placeholder="Enter height">
-            </div>
-            <button id="resize-image-btn">Resize Image</button>
-            <a href="#image-tools">Go To Image Tools</a>
-        </div>
-
-        <!-- PDF Merger -->
-        <div class="tool-card pdf-tool">
-            <i class="fas fa-file-archive"></i>
-            <h3>PDF Merger</h3>
-            <p>Merge multiple PDF files into one.</p>
-            <input type="file" id="merge-pdf-upload" accept="application/pdf" multiple>
-            <div class="file-size" id="merge-pdf-file-size"></div>
-            <button id="merge-pdf-btn">Merge PDFs</button>
-            <a href="#pdf-tools">Go To PDF Tools</a>
-        </div>
-
-        <!-- Image Converter -->
-        <div class="tool-card image-tool">
-            <i class="fas fa-exchange-alt"></i>
-            <h3>Image Converter</h3>
-            <p>Convert images to different formats (JPG, PNG, etc.).</p>
-            <input type="file" id="convert-image-upload" accept="image/*">
-            <div class="file-size" id="convert-image-file-size"></div>
-            <div class="advanced-options">
-                <label for="image-format">Select Output Format:</label>
-                <select id="image-format">
-                    <option value="jpg">JPG</option>
-                    <option value="png">PNG</option>
-                    <option value="webp">WEBP</option>
-                </select>
-            </div>
-            <button id="convert-image-btn">Convert Image</button>
-            <a href="#image-tools">Go To Image Tools</a>
-        </div>
-
-        <!-- PDF Splitter -->
-        <div class="tool-card pdf-tool">
-            <i class="fas fa-cut"></i>
-            <h3>PDF Splitter</h3>
-            <p>Split PDF files into individual pages.</p>
-            <input type="file" id="split-pdf-upload" accept="application/pdf">
-            <div class="file-size" id="split-pdf-file-size"></div>
-            <div class="advanced-options">
-                <label for="split-range">Page Range (e.g., 1-3):</label>
-                <input type="text" id="split-range" placeholder="Enter page range">
-            </div>
-            <button id="split-pdf-btn">Split PDF</button>
-            <a href="#pdf-tools">Go To PDF Tools</a>
-        </div>
-
-        <!-- QR Code Generator -->
-        <div class="tool-card other-tool">
-            <i class="fas fa-qrcode"></i>
-            <h3>QR Code Generator</h3>
-            <p>Generate QR codes for URLs, text, and more.</p>
-            <div class="advanced-options">
-                <label for="qr-content">Enter Content:</label>
-                <input type="text" id="qr-content" placeholder="Enter URL or text">
-            </div>
-            <button id="generate-qr-btn">Generate QR Code</button>
-            <a href="#other-tools">Go To Other Tools</a>
-        </div>
-
-        <!-- File Converter -->
-        <div class="tool-card other-tool">
-            <i class="fas fa-file-export"></i>
-            <h3>File Converter</h3>
-            <p>Convert files between various formats.</p>
-            <input type="file" id="convert-file-upload">
-            <div class="file-size" id="convert-file-file-size"></div>
-            <div class="advanced-options">
-                <label for="file-format">Select Output Format:</label>
-                <select id="file-format">
-                    <option value="pdf">PDF</option>
-                    <option value="docx">DOCX</option>
-                    <option value="txt">TXT</option>
-                </select>
-            </div>
-            <button id="convert-file-btn">Convert File</button>
-            <a href="#other-tools">Go To Other Tools</a>
-        </div>
-
-        <!-- Password Generator -->
-        <div class="tool-card other-tool">
-            <i class="fas fa-key"></i>
-            <h3>Password Generator</h3>
-            <p>Create strong and secure passwords.</p>
-            <div class="advanced-options">
-                <label for="password-length">Password Length:</label>
-                <input type="number" id="password-length" placeholder="Enter length" min="8" max="32">
-            </div>
-            <button id="generate-password-btn">Generate Password</button>
-            <div id="generated-password"></div>
-            <a href="#other-tools">Go To Other Tools</a>
-        </div>
-
-        <!-- PDF Comparer -->
-        <div class="tool-card pdf-tool">
-            <i class="fas fa-file-contract"></i>
-            <h3>PDF Comparer</h3>
-            <p>Compare two PDF files for differences.</p>
-            <input type="file" id="compare-pdf-upload1" accept="application/pdf">
-            <input type="file" id="compare-pdf-upload2" accept="application/pdf">
-            <button id="compare-pdf-btn">Compare PDFs</button>
-            <a href="#pdf-tools">Go To PDF Tools</a>
-        </div>
-
-        <!-- PDF Searchable Text -->
-        <div class="tool-card pdf-tool">
-            <i class="fas fa-search"></i>
-            <h3>PDF Searchable Text</h3>
-            <p>Make scanned PDFs searchable.</p>
-            <input type="file" id="searchable-pdf-upload" accept="application/pdf">
-            <button id="make-searchable-btn">Make Searchable</button>
-            <a href="#pdf-tools">Go To PDF Tools</a>
-        </div>
-    </section>
-
-    <!-- Ad Space 2 -->
-    <div class="ad-space">
-        <!-- Google AdSense Ad Unit -->
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-YOUR_AD_UNIT_ID"
-             data-ad-slot="YOUR_AD_SLOT_ID"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
+  <nav>
+    <div class="container">
+      <ul>
+        <li><a href="#all-tools" class="active">All Tools</a></li>
+        <li><a href="#image-tools">Image Tools</a></li>
+        <li><a href="#pdf-tools">PDF Tools</a></li>
+        <li><a href="#other-tools">Other Tools</a></li>
+      </ul>
     </div>
+  </nav>
 
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2023 Online Tools. All rights reserved.</p>
-    </footer>
+  <section id="ad-section">
+    <div class="container">
+      <!-- AdSense Ad Unit -->
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-YOUR_AD_UNIT_ID"
+           data-ad-slot="1234567890"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>
+           (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </section>
 
-    <script>
-        // Filter Tools by Category
-        function filterTools(category) {
-            const tools = document.querySelectorAll('.tool-card');
-            tools.forEach(tool => {
-                if (category === 'all') {
-                    tool.style.display = 'block';
-                } else {
-                    if (tool.classList.contains(`${category}-tool`)) {
-                        tool.style.display = 'block';
-                    } else {
-                        tool.style.display = 'none';
-                    }
-                }
-            });
+  <section id="all-tools" class="tool-section">
+    <div class="container">
+      <h2>All Tools</h2>
+      <div class="tool-grid">
+        <a href="#" class="tool-card">
+          <h3>Image Compression</h3>
+          <p>Compress images without losing quality.</p>
+        </a>
+        <a href="#" class="tool-card">
+          <h3>PDF Compression</h3>
+          <p>Reduce PDF file size efficiently.</p>
+        </a>
+        <a href="#" class="tool-card">
+          <h3>Image Resizer</h3>
+          <p>Resize images to any dimension.</p>
+        </a>
+        <a href="#" class="tool-card">
+          <h3>PDF Merger</h3>
+          <p>Merge multiple PDFs into one.</p>
+        </a>
+        <a href="#" class="tool-card">
+          <h3>Image Converter</h3>
+          <p>Convert images to different formats.</p>
+        </a>
+        <a href="#" class="tool-card">
+          <h3>PDF Splitter</h3>
+          <p>Split PDFs into individual pages.</p>
+        </a>
+        <a href="#" class="tool-card">
+          <h3>QR Code Generator</h3>
+          <p>Create QR codes for URLs, text, and more.</p>
+        </a>
+        <a href="#" class="tool-card">
+          <h3>File Converter</h3>
+          <p>Convert files to various formats.</p>
+        </a>
+        <a href="#" class="tool-card">
+          <h3>Password Generator</h3>
+          <p>Generate strong and secure passwords.</p>
+        </a>
+        <a href="#" class="tool-card">
+          <h3>PDF Comparer</h3>
+          <p>Compare two PDFs for differences.</p>
+        </a>
+        <a href="#" class="tool-card">
+          <h3>PDF Searchable Text</h3>
+          <p>Make PDFs searchable with OCR.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="image-tools" class="tool-section">
+    <div class="container">
+      <h2>Image Tools</h2>
+      <div class="tool-grid">
+        <a href="#" class="tool-card">
+          <h3>Image Compression</h3>
+          <p>Compress images without losing quality.</p>
+        </a>
+        <a href="#" class="tool-card">
+          <h3>Image Resizer</h3>
+          <p>Resize images to any dimension.</p>
+        </a>
+        <a href="#" class="tool-card">
+          <h3>Image Converter</h3>
+          <p>Convert images to different formats.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="pdf-tools" class="tool-section">
+    <div class="container">
+      <h2>PDF Tools</h2>
+      <div class="tool-grid">
+        <a href="#" class="tool-card">
+          <h3>PDF Compression</h3>
+          <p>Reduce PDF file size efficiently.</p>
+        </a>
+        <a href="#" class="tool-card">
+          <h3>PDF Merger</h3>
+          <p>Merge multiple PDFs into one.</p>
+        </a>
+        <a href="#" class="tool-card">
+          <h3>PDF Splitter</h3>
+          <p>Split PDFs into individual pages.</p>
+        </a>
+        <a href="#" class="tool-card">
+          <h3>PDF Comparer</h3>
+          <p>Compare two PDFs for differences.</p>
+        </a>
+        <a href="#" class="tool-card">
+          <h3>PDF Searchable Text</h3>
+          <p>Make PDFs searchable with OCR.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="other-tools" class="tool-section">
+    <div class="container">
+      <h2>Other Tools</h2>
+      <div class="tool-grid">
+        <a href="#" class="tool-card">
+          <h3>QR Code Generator</h3>
+          <p>Create QR codes for URLs, text, and more.</p>
+        </a>
+        <a href="#" class="tool-card">
+          <h3>File Converter</h3>
+          <p>Convert files to various formats.</p>
+        </a>
+        <a href="#" class="tool-card">
+          <h3>Password Generator</h3>
+          <p>Generate strong and secure passwords.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2023 Online Tools. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('nav ul li a').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+
+    // Highlight active section in navigation
+    window.addEventListener('scroll', () => {
+      const sections = document.querySelectorAll('.tool-section');
+      const navLinks = document.querySelectorAll('nav ul li a');
+
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        if (window.scrollY >= sectionTop - sectionHeight / 3) {
+          const id = section.getAttribute('id');
+          navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${id}`) {
+              link.classList.add('active');
+            }
+          });
         }
-
-        // Image Compression
-        const imageUpload = document.getElementById('image-upload');
-        const compressImageBtn = document.getElementById('compress-image-btn');
-        const imageFileSize = document.getElementById('image-file-size');
-        const compressedImageFileSize = document.getElementById('compressed-image-file-size');
-
-        imageUpload.addEventListener('change', function () {
-            const file = this.files[0];
-            if (file) {
-                imageFileSize.textContent = `Original Size: ${(file.size / 1024).toFixed(2)} KB`;
-            }
-        });
-
-        compressImageBtn.addEventListener('click', function () {
-            const file = imageUpload.files[0];
-            if (!file) {
-                alert('Please upload an image first.');
-                return;
-            }
-
-            const compressionLevel = parseFloat(document.getElementById('compression-level').value);
-            const compressedSize = (file.size / 1024) * compressionLevel; // Example: Adjust size based on compression level
-            compressedImageFileSize.textContent = `Compressed Size: ${compressedSize.toFixed(2)} KB`;
-        });
-
-        // PDF Compression
-        const pdfUpload = document.getElementById('pdf-upload');
-        const compressPdfBtn = document.getElementById('compress-pdf-btn');
-        const pdfFileSize = document.getElementById('pdf-file-size');
-        const compressedPdfFileSize = document.getElementById('compressed-pdf-file-size');
-
-        pdfUpload.addEventListener('change', function () {
-            const file = this.files[0];
-            if (file) {
-                pdfFileSize.textContent = `Original Size: ${(file.size / 1024).toFixed(2)} KB`;
-            }
-        });
-
-        compressPdfBtn.addEventListener('click', function () {
-            const file = pdfUpload.files[0];
-            if (!file) {
-                alert('Please upload a PDF first.');
-                return;
-            }
-
-            const desiredSize = parseFloat(document.getElementById('pdf-size').value);
-            const compressedSize = desiredSize * 1024; // Convert MB to KB
-            compressedPdfFileSize.textContent = `Compressed Size: ${compressedSize.toFixed(2)} KB`;
-        });
-
-        // Image Resizer
-        const resizeImageUpload = document.getElementById('resize-image-upload');
-        const resizeImageBtn = document.getElementById('resize-image-btn');
-        const resizeImageFileSize = document.getElementById('resize-image-file-size');
-
-        resizeImageUpload.addEventListener('change', function () {
-            const file = this.files[0];
-            if (file) {
-                resizeImageFileSize.textContent = `Original Size: ${(file.size / 1024).toFixed(2)} KB`;
-            }
-        });
-
-        // PDF Merger
-        const mergePdfUpload = document.getElementById('merge-pdf-upload');
-        const mergePdfBtn = document.getElementById('merge-pdf-btn');
-        const mergePdfFileSize = document.getElementById('merge-pdf-file-size');
-
-        mergePdfUpload.addEventListener('change', function () {
-            const files = this.files;
-            if (files.length > 0) {
-                let totalSize = 0;
-                for (const file of files) {
-                    totalSize += file.size;
-                }
-                mergePdfFileSize.textContent = `Total Size: ${(totalSize / 1024).toFixed(2)} KB`;
-            }
-        });
-    </script>
+      });
+    });
+  </script>
 </body>
 </html>
