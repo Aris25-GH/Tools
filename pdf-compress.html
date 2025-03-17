@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Compress PDF files online for free. Reduce PDF file size without losing quality. Choose compression level and desired output size.">
+  <meta name="keywords" content="PDF compression, compress PDF, reduce PDF size, PDF optimizer, free PDF compressor">
+  <meta name="author" content="Your Website Name">
+  <title>Free PDF Compression Tool - Compress PDF Files Online</title>
+  <style>
+    /* General Styles */
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+      color: #333;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-top: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #4a90e2;
+    }
+
+    .upload-section, .options-section, .output-section {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    input[type="file"], select, input[type="number"], input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    input[type="number"]:invalid {
+      border-color: #ff0000;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background: #4a90e2;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .btn:hover {
+      background: #357abd;
+    }
+
+    .btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .output-section {
+      text-align: center;
+    }
+
+    .output-section p {
+      font-size: 1.1rem;
+      margin: 10px 0;
+    }
+
+    .ad-banner {
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .btn {
+        font-size: 14px;
+      }
+    }
+  </style>
+  <!-- Google AdSense Script -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_AD_SENSE_ID" crossorigin="anonymous"></script>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>PDF Compression Tool</h1>
+      <p>Compress PDF files online for free. Reduce PDF file size without losing quality.</p>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <!-- AdSense Banner Ad -->
+      <div class="ad-banner">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_AD_SENSE_ID" crossorigin="anonymous"></script>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-YOUR_AD_SENSE_ID"
+             data-ad-slot="BANNER_AD_SLOT_ID"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      </div>
+
+      <!-- Upload Section -->
+      <div class="upload-section">
+        <label for="pdf-upload">Upload PDF:</label>
+        <input type="file" id="pdf-upload" accept="application/pdf">
+      </div>
+
+      <!-- Password Section (for encrypted PDFs) -->
+      <div class="options-section" id="password-section" style="display: none;">
+        <label for="pdf-password">Enter PDF Password (if encrypted):</label>
+        <input type="password" id="pdf-password" placeholder="Enter password">
+      </div>
+
+      <!-- Compression Options -->
+      <div class="options-section">
+        <label for="compression-level">Compression Level:</label>
+        <select id="compression-level">
+          <option value="0.1">Low</option>
+          <option value="0.5">Medium</option>
+          <option value="0.9">High</option>
+        </select>
+
+        <label for="desired-size">Desired Output Size (MB):</label>
+        <input type="number" id="desired-size" placeholder="Enter desired size in MB (optional)" min="0">
+      </div>
+
+      <!-- Compress Button -->
+      <button class="btn" id="compress-btn">Compress PDF</button>
+
+      <!-- Output Section -->
+      <div class="output-section">
+        <p id="original-size"></p>
+        <p id="compressed-size"></p>
+        <a id="download-link" style="display: none;">Download Compressed PDF</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2023 Free Online Tools. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // JavaScript for PDF Compression
+    const compressionLevelSelect = document.getElementById('compression-level');
+    const desiredSizeInput = document.getElementById('desired-size');
+    const compressBtn = document.getElementById('compress-btn');
+    const passwordSection = document.getElementById('password-section');
+    const pdfPasswordInput = document.getElementById('pdf-password');
+
+    // Disable compression level if desired size is entered
+    desiredSizeInput.addEventListener('input', function () {
+      if (this.value) {
+        compressionLevelSelect.disabled = true;
+      } else {
+        compressionLevelSelect.disabled = false;
+      }
+    });
+
+    // Check if PDF is encrypted
+    const pdfUploadInput = document.getElementById('pdf-upload');
+    pdfUploadInput.addEventListener('change', async function () {
+      const file = this.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = async function (event) {
+        const pdfData = new Uint8Array(event.target.result);
+
+        // Load PDF using PDF.js
+        const loadingTask = pdfjsLib.getDocument({ data: pdfData });
+        try {
+          const pdf = await loadingTask.promise;
+          passwordSection.style.display = 'none'; // Hide password section by default
+        } catch (error) {
+          if (error.name === 'PasswordException') {
+            passwordSection.style.display = 'block'; // Show password section for encrypted PDFs
+          } else {
+            alert('Error loading PDF. Please try again.');
+            console.error(error);
+          }
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    });
+
+    compressBtn.addEventListener('click', async function () {
+      const fileInput = document.getElementById('pdf-upload');
+      const compressionLevel = parseFloat(compressionLevelSelect.value);
+      const desiredSize = parseFloat(desiredSizeInput.value) * 1024 * 1024; // Convert MB to bytes
+
+      if (fileInput.files.length === 0) {
+        alert('Please upload a PDF file first.');
+        return;
+      }
+
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+
+      reader.onload = async function (event) {
+        const pdfData = new Uint8Array(event.target.result);
+
+        // Load PDF using PDF.js
+        const loadingTask = pdfjsLib.getDocument({
+          data: pdfData,
+          password: pdfPasswordInput.value || undefined, // Use password if provided
+        });
+
+        try {
+          const pdf = await loadingTask.promise;
+          const numPages = pdf.numPages;
+
+          // Extract images from PDF
+          const images = [];
+          for (let i = 1; i <= numPages; i++) {
+            const page = await pdf.getPage(i);
+            const viewport = page.getViewport({ scale: 1.5 });
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+
+            await page.render({ canvasContext: context, viewport }).promise;
+            const imageData = canvas.toDataURL('image/jpeg', compressionLevel);
+            images.push(imageData);
+          }
+
+          // Compress images using browser-image-compression
+          const compressedImages = await Promise.all(
+            images.map(async (image) => {
+              const blob = await fetch(image).then((res) => res.blob());
+              const compressedBlob = await imageCompression(blob, {
+                maxSizeMB: desiredSize ? desiredSize / (1024 * 1024) : 1, // Use desired size if provided
+                useWebWorker: true,
+              });
+              return compressedBlob;
+            })
+          );
+
+          // Rebuild PDF using PDF-Lib
+          const { PDFDocument } = PDFLib;
+          const pdfDoc = await PDFDocument.create();
+          for (const image of compressedImages) {
+            const imageBytes = await image.arrayBuffer();
+            const imageEmbed = await pdfDoc.embedJpg(imageBytes);
+            const page = pdfDoc.addPage([imageEmbed.width, imageEmbed.height]);
+            page.drawImage(imageEmbed, {
+              x: 0,
+              y: 0,
+              width: imageEmbed.width,
+              height: imageEmbed.height,
+            });
+          }
+
+          const compressedBytes = await pdfDoc.save();
+
+          // Display original and compressed sizes
+          document.getElementById('original-size').innerText = `Original Size: ${(file.size / (1024 * 1024)).toFixed(2)} MB`;
+          document.getElementById('compressed-size').innerText = `Compressed Size: ${(compressedBytes.length / (1024 * 1024)).toFixed(2)} MB`;
+
+          // Create download link
+          const downloadLink = document.getElementById('download-link');
+          const blob = new Blob([compressedBytes], { type: 'application/pdf' });
+          downloadLink.href = URL.createObjectURL(blob);
+          downloadLink.download = `compressed-${file.name}`;
+          downloadLink.style.display = 'block';
+        } catch (error) {
+          alert('Error compressing PDF. Please ensure the file is not encrypted or scanned.');
+          console.error(error);
+        }
+      };
+
+      reader.readAsArrayBuffer(file);
+    });
+  </script>
+  <!-- PDF.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+  <!-- PDF-Lib Library -->
+  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <!-- Browser Image Compression Library -->
+  <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.0/dist/browser-image-compression.min.js"></script>
+</body>
+</html>
