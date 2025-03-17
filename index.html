@@ -101,22 +101,30 @@
             color: #666;
         }
 
-        .tool-card a {
+        .tool-card input[type="file"] {
+            margin: 10px 0;
+        }
+
+        .tool-card button {
             display: inline-block;
             background-color: #4CAF50;
             color: white;
             padding: 10px 20px;
-            text-decoration: none;
+            border: none;
             border-radius: 5px;
-            margin-bottom: 20px;
+            cursor: pointer;
             transition: background-color 0.3s ease;
         }
 
-        .tool-card a:hover {
+        .tool-card button:hover {
             background-color: #45a049;
         }
 
-        /* Advanced Options */
+        .file-size {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
         .advanced-options {
             display: none;
             margin-top: 15px;
@@ -128,17 +136,13 @@
             font-weight: bold;
         }
 
+        .advanced-options input,
         .advanced-options select {
             width: 100%;
             padding: 10px;
             border-radius: 5px;
             border: 1px solid #ddd;
-        }
-
-        /* File Size Display */
-        .file-size {
-            margin-top: 15px;
-            font-weight: bold;
+            margin-bottom: 10px;
         }
 
         /* Ad Spaces */
@@ -195,9 +199,10 @@
 
     <!-- Navigation -->
     <nav>
-        <a href="#image-tools">Image Tools</a>
-        <a href="#pdf-tools">PDF Tools</a>
-        <a href="#other-tools">Other Tools</a>
+        <a href="#all-tools" onclick="filterTools('all')">All Tools</a>
+        <a href="#image-tools" onclick="filterTools('image')">Image Tools</a>
+        <a href="#pdf-tools" onclick="filterTools('pdf')">PDF Tools</a>
+        <a href="#other-tools" onclick="filterTools('other')">Other Tools</a>
     </nav>
 
     <!-- Ad Space 1 -->
@@ -217,26 +222,33 @@
     <!-- Tools Section -->
     <section class="tools">
         <!-- Image Compression -->
-        <div class="tool-card" id="image-tools">
+        <div class="tool-card image-tool">
             <i class="fas fa-file-image"></i>
             <h3>Image Compression</h3>
             <p>Compress images to reduce file size without losing quality.</p>
             <input type="file" id="image-upload" accept="image/*">
             <div class="file-size" id="image-file-size"></div>
+            <div class="advanced-options">
+                <label for="compression-level">Compression Level:</label>
+                <select id="compression-level">
+                    <option value="0.1">Low</option>
+                    <option value="0.5" selected>Medium</option>
+                    <option value="0.9">High</option>
+                </select>
+            </div>
             <button id="compress-image-btn">Compress Image</button>
             <div class="file-size" id="compressed-image-file-size"></div>
-            <a href="/image-compression-tool">Go to Tool</a>
+            <a href="/img-compression.html">Go To Image Tools</a>
         </div>
 
         <!-- PDF Compression -->
-        <div class="tool-card" id="pdf-tools">
+        <div class="tool-card pdf-tool">
             <i class="fas fa-file-pdf"></i>
             <h3>PDF Compression</h3>
             <p>Compress PDF files to reduce their size.</p>
             <input type="file" id="pdf-upload" accept="application/pdf">
             <div class="file-size" id="pdf-file-size"></div>
-            <button id="compress-pdf-btn">Compress PDF</button>
-            <div class="advanced-options" id="pdf-advanced-options">
+            <div class="advanced-options">
                 <label for="pdf-size">Select Desired PDF Size:</label>
                 <select id="pdf-size">
                     <option value="0.5">500 KB</option>
@@ -244,80 +256,138 @@
                     <option value="2">2 MB</option>
                 </select>
             </div>
+            <button id="compress-pdf-btn">Compress PDF</button>
             <div class="file-size" id="compressed-pdf-file-size"></div>
-            <a href="/pdf-compression-tool">Go to Tool</a>
+            <a href="#pdf-tools">Go To PDF Tools</a>
         </div>
 
         <!-- Image Resizer -->
-        <div class="tool-card">
+        <div class="tool-card image-tool">
             <i class="fas fa-expand-arrows-alt"></i>
             <h3>Image Resizer</h3>
             <p>Resize images to your desired dimensions.</p>
-            <a href="/image-resizer-tool">Go to Tool</a>
+            <input type="file" id="resize-image-upload" accept="image/*">
+            <div class="file-size" id="resize-image-file-size"></div>
+            <div class="advanced-options">
+                <label for="resize-width">Width (px):</label>
+                <input type="number" id="resize-width" placeholder="Enter width">
+                <label for="resize-height">Height (px):</label>
+                <input type="number" id="resize-height" placeholder="Enter height">
+            </div>
+            <button id="resize-image-btn">Resize Image</button>
+            <a href="#image-tools">Go To Image Tools</a>
         </div>
 
         <!-- PDF Merger -->
-        <div class="tool-card">
+        <div class="tool-card pdf-tool">
             <i class="fas fa-file-archive"></i>
             <h3>PDF Merger</h3>
             <p>Merge multiple PDF files into one.</p>
-            <a href="/pdf-merger-tool">Go to Tool</a>
+            <input type="file" id="merge-pdf-upload" accept="application/pdf" multiple>
+            <div class="file-size" id="merge-pdf-file-size"></div>
+            <button id="merge-pdf-btn">Merge PDFs</button>
+            <a href="#pdf-tools">Go To PDF Tools</a>
         </div>
 
         <!-- Image Converter -->
-        <div class="tool-card">
+        <div class="tool-card image-tool">
             <i class="fas fa-exchange-alt"></i>
             <h3>Image Converter</h3>
             <p>Convert images to different formats (JPG, PNG, etc.).</p>
-            <a href="/image-converter-tool">Go to Tool</a>
+            <input type="file" id="convert-image-upload" accept="image/*">
+            <div class="file-size" id="convert-image-file-size"></div>
+            <div class="advanced-options">
+                <label for="image-format">Select Output Format:</label>
+                <select id="image-format">
+                    <option value="jpg">JPG</option>
+                    <option value="png">PNG</option>
+                    <option value="webp">WEBP</option>
+                </select>
+            </div>
+            <button id="convert-image-btn">Convert Image</button>
+            <a href="#image-tools">Go To Image Tools</a>
         </div>
 
         <!-- PDF Splitter -->
-        <div class="tool-card">
+        <div class="tool-card pdf-tool">
             <i class="fas fa-cut"></i>
             <h3>PDF Splitter</h3>
             <p>Split PDF files into individual pages.</p>
-            <a href="/pdf-splitter-tool">Go to Tool</a>
+            <input type="file" id="split-pdf-upload" accept="application/pdf">
+            <div class="file-size" id="split-pdf-file-size"></div>
+            <div class="advanced-options">
+                <label for="split-range">Page Range (e.g., 1-3):</label>
+                <input type="text" id="split-range" placeholder="Enter page range">
+            </div>
+            <button id="split-pdf-btn">Split PDF</button>
+            <a href="#pdf-tools">Go To PDF Tools</a>
         </div>
 
         <!-- QR Code Generator -->
-        <div class="tool-card">
+        <div class="tool-card other-tool">
             <i class="fas fa-qrcode"></i>
             <h3>QR Code Generator</h3>
             <p>Generate QR codes for URLs, text, and more.</p>
-            <a href="/qr-code-generator-tool">Go to Tool</a>
+            <div class="advanced-options">
+                <label for="qr-content">Enter Content:</label>
+                <input type="text" id="qr-content" placeholder="Enter URL or text">
+            </div>
+            <button id="generate-qr-btn">Generate QR Code</button>
+            <a href="#other-tools">Go To Other Tools</a>
         </div>
 
         <!-- File Converter -->
-        <div class="tool-card">
+        <div class="tool-card other-tool">
             <i class="fas fa-file-export"></i>
             <h3>File Converter</h3>
             <p>Convert files between various formats.</p>
-            <a href="/file-converter-tool">Go to Tool</a>
+            <input type="file" id="convert-file-upload">
+            <div class="file-size" id="convert-file-file-size"></div>
+            <div class="advanced-options">
+                <label for="file-format">Select Output Format:</label>
+                <select id="file-format">
+                    <option value="pdf">PDF</option>
+                    <option value="docx">DOCX</option>
+                    <option value="txt">TXT</option>
+                </select>
+            </div>
+            <button id="convert-file-btn">Convert File</button>
+            <a href="#other-tools">Go To Other Tools</a>
         </div>
 
         <!-- Password Generator -->
-        <div class="tool-card">
+        <div class="tool-card other-tool">
             <i class="fas fa-key"></i>
             <h3>Password Generator</h3>
             <p>Create strong and secure passwords.</p>
-            <a href="/password-generator-tool">Go to Tool</a>
+            <div class="advanced-options">
+                <label for="password-length">Password Length:</label>
+                <input type="number" id="password-length" placeholder="Enter length" min="8" max="32">
+            </div>
+            <button id="generate-password-btn">Generate Password</button>
+            <div id="generated-password"></div>
+            <a href="#other-tools">Go To Other Tools</a>
         </div>
 
         <!-- PDF Comparer -->
-        <div class="tool-card">
+        <div class="tool-card pdf-tool">
             <i class="fas fa-file-contract"></i>
             <h3>PDF Comparer</h3>
             <p>Compare two PDF files for differences.</p>
-            <a href="/pdf-comparer-tool">Go to Tool</a>
+            <input type="file" id="compare-pdf-upload1" accept="application/pdf">
+            <input type="file" id="compare-pdf-upload2" accept="application/pdf">
+            <button id="compare-pdf-btn">Compare PDFs</button>
+            <a href="#pdf-tools">Go To PDF Tools</a>
         </div>
 
         <!-- PDF Searchable Text -->
-        <div class="tool-card">
+        <div class="tool-card pdf-tool">
             <i class="fas fa-search"></i>
             <h3>PDF Searchable Text</h3>
             <p>Make scanned PDFs searchable.</p>
-            <a href="/pdf-searchable-text-tool">Go to Tool</a>
+            <input type="file" id="searchable-pdf-upload" accept="application/pdf">
+            <button id="make-searchable-btn">Make Searchable</button>
+            <a href="#pdf-tools">Go To PDF Tools</a>
         </div>
     </section>
 
@@ -341,6 +411,22 @@
     </footer>
 
     <script>
+        // Filter Tools by Category
+        function filterTools(category) {
+            const tools = document.querySelectorAll('.tool-card');
+            tools.forEach(tool => {
+                if (category === 'all') {
+                    tool.style.display = 'block';
+                } else {
+                    if (tool.classList.contains(`${category}-tool`)) {
+                        tool.style.display = 'block';
+                    } else {
+                        tool.style.display = 'none';
+                    }
+                }
+            });
+        }
+
         // Image Compression
         const imageUpload = document.getElementById('image-upload');
         const compressImageBtn = document.getElementById('compress-image-btn');
@@ -361,8 +447,8 @@
                 return;
             }
 
-            // Simulate compression (replace with actual compression logic)
-            const compressedSize = (file.size / 1024) * 0.5; // Example: 50% compression
+            const compressionLevel = parseFloat(document.getElementById('compression-level').value);
+            const compressedSize = (file.size / 1024) * compressionLevel; // Example: Adjust size based on compression level
             compressedImageFileSize.textContent = `Compressed Size: ${compressedSize.toFixed(2)} KB`;
         });
 
@@ -371,13 +457,11 @@
         const compressPdfBtn = document.getElementById('compress-pdf-btn');
         const pdfFileSize = document.getElementById('pdf-file-size');
         const compressedPdfFileSize = document.getElementById('compressed-pdf-file-size');
-        const pdfAdvancedOptions = document.getElementById('pdf-advanced-options');
 
         pdfUpload.addEventListener('change', function () {
             const file = this.files[0];
             if (file) {
                 pdfFileSize.textContent = `Original Size: ${(file.size / 1024).toFixed(2)} KB`;
-                pdfAdvancedOptions.style.display = 'block';
             }
         });
 
@@ -391,6 +475,34 @@
             const desiredSize = parseFloat(document.getElementById('pdf-size').value);
             const compressedSize = desiredSize * 1024; // Convert MB to KB
             compressedPdfFileSize.textContent = `Compressed Size: ${compressedSize.toFixed(2)} KB`;
+        });
+
+        // Image Resizer
+        const resizeImageUpload = document.getElementById('resize-image-upload');
+        const resizeImageBtn = document.getElementById('resize-image-btn');
+        const resizeImageFileSize = document.getElementById('resize-image-file-size');
+
+        resizeImageUpload.addEventListener('change', function () {
+            const file = this.files[0];
+            if (file) {
+                resizeImageFileSize.textContent = `Original Size: ${(file.size / 1024).toFixed(2)} KB`;
+            }
+        });
+
+        // PDF Merger
+        const mergePdfUpload = document.getElementById('merge-pdf-upload');
+        const mergePdfBtn = document.getElementById('merge-pdf-btn');
+        const mergePdfFileSize = document.getElementById('merge-pdf-file-size');
+
+        mergePdfUpload.addEventListener('change', function () {
+            const files = this.files;
+            if (files.length > 0) {
+                let totalSize = 0;
+                for (const file of files) {
+                    totalSize += file.size;
+                }
+                mergePdfFileSize.textContent = `Total Size: ${(totalSize / 1024).toFixed(2)} KB`;
+            }
         });
     </script>
 </body>
