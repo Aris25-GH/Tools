@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Split PDF files online for free. Split PDF into individual pages, ranges, or multiple ranges while maintaining quality.">
+  <meta name="keywords" content="PDF splitter, split PDF, free PDF splitter, PDF pages, split PDF pages, PDF range split">
+  <meta name="author" content="Your Website Name">
+  <title>Free PDF Splitter Tool - Split PDF Files Online</title>
+  <style>
+    /* General Styles */
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+      color: #333;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-top: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #4a90e2;
+    }
+
+    .upload-section, .options-section, .output-section {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    input[type="file"], input[type="number"], textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    textarea {
+      resize: vertical;
+      height: 100px;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background: #4a90e2;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .btn:hover {
+      background: #357abd;
+    }
+
+    .btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .output-section {
+      text-align: center;
+    }
+
+    .output-section p {
+      font-size: 1.1rem;
+      margin: 10px 0;
+    }
+
+    .preview-section {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .preview-section iframe {
+      width: 100%;
+      height: 500px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
+
+    .ad-banner {
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .btn {
+        font-size: 14px;
+      }
+
+      .preview-section iframe {
+        height: 300px;
+      }
+    }
+  </style>
+  <!-- Google AdSense Script -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_AD_SENSE_ID" crossorigin="anonymous"></script>
+  <!-- JSZip Library for ZIP download -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+  <!-- FileSaver.js for saving files -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <!-- PDF-Lib Library for PDF splitting -->
+  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>PDF Splitter Tool</h1>
+      <p>Split PDF files online for free. Split PDF into individual pages, ranges, or multiple ranges.</p>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <!-- AdSense Banner Ad -->
+      <div class="ad-banner">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_AD_SENSE_ID" crossorigin="anonymous"></script>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-YOUR_AD_SENSE_ID"
+             data-ad-slot="BANNER_AD_SLOT_ID"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      </div>
+
+      <!-- Upload Section -->
+      <div class="upload-section">
+        <label for="pdf-upload">Upload PDF File:</label>
+        <input type="file" id="pdf-upload" accept="application/pdf">
+      </div>
+
+      <!-- Split Options -->
+      <div class="options-section">
+        <label for="split-ranges">Split Ranges (e.g., 1-3, 5-7):</label>
+        <textarea id="split-ranges" placeholder="Enter page ranges separated by commas"></textarea>
+      </div>
+
+      <!-- Split Button -->
+      <button class="btn" id="split-btn">Split PDF</button>
+
+      <!-- Download All Button -->
+      <button class="btn" id="download-all-btn" style="display: none;">Download All Split PDFs</button>
+
+      <!-- Preview Section -->
+      <div class="preview-section">
+        <iframe id="pdf-preview" src="#" style="display: none;"></iframe>
+      </div>
+
+      <!-- Output Section -->
+      <div class="output-section">
+        <p id="total-pages"></p>
+        <p id="split-pages"></p>
+        <a id="download-link" style="display: none;">Download Split PDF</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2023 Free Online Tools. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // JavaScript for PDF Splitting
+    const pdfUploadInput = document.getElementById('pdf-upload');
+    const splitBtn = document.getElementById('split-btn');
+    const downloadAllBtn = document.getElementById('download-all-btn');
+    const splitRangesInput = document.getElementById('split-ranges');
+    const pdfPreview = document.getElementById('pdf-preview');
+    const totalPagesDisplay = document.getElementById('total-pages');
+    const splitPagesDisplay = document.getElementById('split-pages');
+    const downloadLink = document.getElementById('download-link');
+
+    let splitPDFs = [];
+    let totalPages = 0;
+
+    // Handle PDF file upload
+    pdfUploadInput.addEventListener('change', async function () {
+      const file = this.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = async function (event) {
+        const pdfData = new Uint8Array(event.target.result);
+
+        // Load PDF using PDF-Lib
+        const { PDFDocument } = PDFLib;
+        const pdfDoc = await PDFDocument.load(pdfData);
+        totalPages = pdfDoc.getPageCount();
+
+        // Display total number of pages
+        totalPagesDisplay.innerText = `Total Pages: ${totalPages}`;
+
+        // Show preview
+        pdfPreview.src = URL.createObjectURL(file);
+        pdfPreview.style.display = 'block';
+      };
+      reader.readAsArrayBuffer(file);
+    });
+
+    // Split PDF
+    splitBtn.addEventListener('click', async function () {
+      const file = pdfUploadInput.files[0];
+      if (!file) {
+        alert('Please upload a PDF file first.');
+        return;
+      }
+
+      const ranges = splitRangesInput.value.split(',').map(range => range.trim());
+      const validRanges = [];
+
+      for (const range of ranges) {
+        const [start, end] = range.split('-').map(Number);
+        if (!isNaN(start) && !isNaN(end) && start > 0 && end > 0 && start <= end && end <= totalPages) {
+          validRanges.push({ start, end });
+        } else {
+          alert(`Invalid range: ${range}. Please enter valid page ranges.`);
+          return;
+        }
+      }
+
+      const reader = new FileReader();
+      reader.onload = async function (event) {
+        const pdfData = new Uint8Array(event.target.result);
+
+        // Load PDF using PDF-Lib
+        const { PDFDocument } = PDFLib;
+        const pdfDoc = await PDFDocument.load(pdfData);
+
+        splitPDFs = []; // Reset split PDFs array
+
+        // Split PDF into specified ranges
+        for (const range of validRanges) {
+          const splitPdf = await PDFDocument.create();
+          const pages = await splitPdf.copyPages(pdfDoc, Array.from({ length: range.end - range.start + 1 }, (_, i) => range.start - 1 + i));
+          pages.forEach(page => splitPdf.addPage(page));
+          const splitBytes = await splitPdf.save();
+          splitPDFs.push({ blob: new Blob([splitBytes], { type: 'application/pdf' }), name: `pages-${range.start}-${range.end}.pdf` });
+        }
+
+        // Display split pages
+        splitPagesDisplay.innerText = `Split Pages: ${validRanges.map(range => `${range.start}-${range.end}`).join(', ')}`;
+
+        // Show "Download All" button if multiple ranges are split
+        if (splitPDFs.length > 1) {
+          downloadAllBtn.style.display = 'block';
+        }
+
+        // Create download link for the first split PDF
+        downloadLink.href = URL.createObjectURL(splitPDFs[0].blob);
+        downloadLink.download = splitPDFs[0].name;
+        downloadLink.style.display = 'block';
+      };
+      reader.readAsArrayBuffer(file);
+    });
+
+    // Download all split PDFs as a ZIP file
+    downloadAllBtn.addEventListener('click', function () {
+      const zip = new JSZip();
+      splitPDFs.forEach((pdf, index) => {
+        zip.file(pdf.name, pdf.blob);
+      });
+
+      zip.generateAsync({ type: 'blob' }).then(function (content) {
+        saveAs(content, 'split-pdfs.zip');
+      });
+    });
+  </script>
+</body>
+</html>
