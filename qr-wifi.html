@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Wi-Fi QR Code Generator</title>
+</head>
+<body>
+  <input type="text" id="ssid" placeholder="Enter SSID">
+  <input type="text" id="password" placeholder="Enter Password">
+  <button onclick="generateQRCode()">Generate QR Code</button>
+  <div id="qrcode"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4"></script>
+  <script>
+    function generateQRCode() {
+      const ssid = document.getElementById('ssid').value;
+      const password = document.getElementById('password').value;
+      const qrData = `WIFI:S:${ssid};T:WPA;P:${password};;`;
+      QRCode.toDataURL(qrData, (err, url) => {
+        if (err) console.error(err);
+        else {
+          const img = document.createElement('img');
+          img.src = url;
+          document.getElementById('qrcode').innerHTML = '';
+          document.getElementById('qrcode').appendChild(img);
+        }
+      });
+    }
+  </script>
+</body>
+</html>
