@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Compare two PDF files online with our fully responsive PDF comparison tool. Easy to use, fast, and SEO-optimized.">
-    <meta name="keywords" content="PDF compare, PDF comparison tool, online PDF tool, compare PDF files">
+    <meta name="description" content="Compare two PDF files online with highlighted differences and download the result.">
+    <meta name="keywords" content="PDF compare, highlight differences, download compared PDF">
     <meta name="author" content="Your Company Name">
-    <title>PDF Compare Tool - Compare Two PDF Files Online</title>
+    <title>PDF Compare Tool - Highlight Differences & Download</title>
     <link rel="stylesheet" href="pdf-compare.css">
 
     <!-- PDF.js Library -->
@@ -18,7 +18,7 @@
 <body>
     <header>
         <h1>PDF Compare Tool</h1>
-        <p>Upload two PDF files to compare them side by side.</p>
+        <p>Upload two PDF files to compare, highlight differences, and download the result.</p>
     </header>
 
     <main>
@@ -27,6 +27,7 @@
             <input type="file" id="file1" accept="application/pdf">
             <input type="file" id="file2" accept="application/pdf">
             <button id="compare-btn">Compare PDFs</button>
+            <button id="download-btn" disabled>Download Compared PDF</button>
         </section>
 
         <!-- PDF Display Section -->
