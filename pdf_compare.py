@@ -15,7 +15,7 @@ def compare_pdfs(pdf1_path, pdf2_path, output_path):
 def index():
     return render_template('pdf_compare.html')
 
-@app.route('/compare', methods=['POST'])
+@app.route('/Tools/compare', methods=['POST'])
 def upload_files():
     pdf1 = request.files['pdf1']
     pdf2 = request.files['pdf2']
