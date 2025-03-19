@@ -8,8 +8,12 @@
     <meta name="author" content="Your Company Name">
     <title>PDF Compare Tool - Compare Two PDF Files Online</title>
     <link rel="stylesheet" href="pdf-compare.css">
-    <!-- Google AdSense -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=YOUR_ADSENSE_ID" crossorigin="anonymous"></script>
+
+    <!-- PDF.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js";
+    </script>
 </head>
 <body>
     <header>
@@ -27,33 +31,15 @@
 
         <!-- PDF Display Section -->
         <section id="pdf-display">
-            <div id="pdf1-container"></div>
-            <div id="pdf2-container"></div>
-        </section>
-
-        <!-- Ad Section -->
-        <section id="ad-section">
-            <div class="ad-unit">
-                <!-- Google AdSense Ad Unit -->
-                <ins class="adsbygoogle"
-                     style="display:block"
-                     data-ad-client="YOUR_ADSENSE_ID"
-                     data-ad-slot="YOUR_AD_UNIT_ID"
-                     data-ad-format="auto"
-                     data-full-width-responsive="true"></ins>
-                <script>
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>
-            </div>
+            <div id="pdf1-container" class="pdf-container"></div>
+            <div id="pdf2-container" class="pdf-container"></div>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2023 Your Company Name. All rights reserved.</p>
+        <p>&copy; 2025 Your Company Name. All rights reserved.</p>
     </footer>
 
-    <!-- PDF.js Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js" integrity="sha512-..."></script>
     <script src="pdf-compare.js"></script>
 </body>
 </html>
