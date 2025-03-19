@@ -3,144 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Generate high-quality QR codes for contact sharing with name, title, address, website, and more.">
-    <meta name="keywords" content="QR code generator, contact QR, vCard QR code, high-quality QR, digital business card">
+    <meta name="description" content="Generate QR codes for sharing your Wi-Fi SSID and password. Scan the QR code to connect to the internet automatically.">
+    <meta name="keywords" content="QR Code Generator, Wi-Fi QR Code, Share Wi-Fi, Scan QR Code">
     <meta name="author" content="Your Name">
-    <title>QR Code Contact Generator</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <title>Wi-Fi QR Code Generator</title>
+    <!-- Google AdSense Code -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_AD_SENSE_ID" crossorigin="anonymous"></script>
     <style>
+        /* General Styles */
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 20px;
-            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
         }
-        .container {
-            max-width: 600px;
-            margin: auto;
-            padding: 20px;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        input, textarea, select {
-            width: 100%;
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-        button {
+
+        header {
             background-color: #007bff;
             color: white;
-            padding: 10px;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            margin-top: 10px;
+            padding: 20px;
+            text-align: center;
         }
+
+        main {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .qr-generator {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
         button:hover {
             background-color: #0056b3;
         }
-        #qrcode {
-            margin: 20px auto;
-        }
-        .download-btn {
-            display: none;
-            margin-top: 10px;
-        }
-        .adsense-container {
-            margin: 20px auto;
+
+        #qr-code-container {
+            margin-top: 20px;
             text-align: center;
+        }
+
+        .advertisement {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>QR Code Contact Generator</h2>
-        <select id="salutation">
-            <option value="">Select</option>
-            <option value="Mr.">Mr.</option>
-            <option value="Mrs.">Mrs.</option>
-            <option value="Ms.">Ms.</option>
-            <option value="Dr.">Dr.</option>
-            <option value="Prof.">Prof.</option>
-        </select>
-        <input type="text" id="name" placeholder="Full Name">
-        <input type="text" id="title" placeholder="Title">
-        <input type="text" id="company" placeholder="Company Name">
-        <input type="text" id="phone" placeholder="Phone Number (Primary)" required>
-        <input type="text" id="phone2" placeholder="Phone Number (Secondary) (Optional)">
-        <input type="text" id="mobile" placeholder="Mobile Number (Primary)">
-        <input type="text" id="mobile2" placeholder="Mobile Number (Secondary) (Optional)">
-        <input type="text" id="email" placeholder="Email">
-        <input type="text" id="website" placeholder="Website URL">
-        <textarea id="address" placeholder="Address"></textarea>
-        <input type="file" id="photo" accept="image/*" aria-label="Choose Photo (Optional)" onchange="validatePhotoSize(this)">
-        <input type="text" id="location" placeholder="Location (Optional, e.g., Google Maps URL)">
-        <input type="text" id="note" placeholder="Note (Optional, max 100 characters)" maxlength="100">
-        <button onclick="generateQRCode()">Generate QR Code</button>
-        <div id="qrcode"></div>
-        <a id="download" class="download-btn" download="QRCode.png">Download QR Code</a>
-    </div>
+    <header>
+        <h1>Wi-Fi QR Code Generator</h1>
+        <p>Easily share your Wi-Fi credentials by generating a QR code.</p>
+    </header>
 
-    <!-- Google AdSense Placeholder -->
-    <div class="adsense-container">
-        <ins class="adsbygoogle"
-            style="display:block"
-            data-ad-client="ca-pub-XXXXXXXXXXXXXXX"
-            data-ad-slot="XXXXXXXXXX"
-            data-ad-format="auto"></ins>
-        <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-    </div>
+    <main>
+        <section class="qr-generator">
+            <form id="wifi-form">
+                <label for="ssid">Wi-Fi SSID:</label>
+                <input type="text" id="ssid" name="ssid" placeholder="Enter your Wi-Fi SSID" required>
 
+                <label for="password">Wi-Fi Password:</label>
+                <input type="text" id="password" name="password" placeholder="Enter your Wi-Fi Password" required>
+
+                <button type="submit">Generate QR Code</button>
+            </form>
+
+            <div id="qr-code-container">
+                <!-- QR Code will be displayed here -->
+            </div>
+        </section>
+
+        <!-- AdSense Ad Unit -->
+        <section class="advertisement">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-YOUR_AD_SENSE_ID"
+                 data-ad-slot="YOUR_AD_SLOT_ID"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Wi-Fi QR Code Generator. All rights reserved.</p>
+    </footer>
+
+    <!-- QRCode.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>
-        function validatePhotoSize(input) {
-            if (input.files.length > 0) {
-                let fileSize = input.files[0].size / 1024 / 1024; // Convert to MB
-                if (fileSize > 5) {
-                    alert("Photo size must not exceed 5MB.");
-                    input.value = "";
-                }
-            }
-        }
-        
-        function generateQRCode() {
-            let salutation = document.getElementById('salutation').value;
-            let name = document.getElementById('name').value;
-            let title = document.getElementById('title').value;
-            let company = document.getElementById('company').value;
-            let phone = document.getElementById('phone').value;
-            let phone2 = document.getElementById('phone2').value;
-            let mobile = document.getElementById('mobile').value;
-            let mobile2 = document.getElementById('mobile2').value;
-            let email = document.getElementById('email').value;
-            let website = document.getElementById('website').value;
-            let address = document.getElementById('address').value;
-            let location = document.getElementById('location').value;
-            let note = document.getElementById('note').value;
-            
-            let vCardData = `BEGIN:VCARD\nVERSION:3.0\nN:${salutation} ${name}\nORG:${company}\nTITLE:${title}\nTEL;TYPE=work,voice:${phone}\nTEL;TYPE=home,voice:${phone2}\nTEL;TYPE=cell:${mobile}\nTEL;TYPE=cell:${mobile2}\nEMAIL:${email}\nURL:${website}\nADR:${address}\nNOTE:${location} ${note}\nEND:VCARD`;
-            
-            document.getElementById("qrcode").innerHTML = "";
-            let qr = new QRCode(document.getElementById("qrcode"), {
-                text: vCardData,
+        // JavaScript Functionality
+        document.getElementById('wifi-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const ssid = document.getElementById('ssid').value;
+            const password = document.getElementById('password').value;
+
+            // Generate Wi-Fi QR Code
+            const wifiString = `WIFI:S:${ssid};T:WPA;P:${password};;`;
+            const qrCodeContainer = document.getElementById('qr-code-container');
+
+            // Clear previous QR code
+            qrCodeContainer.innerHTML = '';
+
+            // Generate new QR code
+            new QRCode(qrCodeContainer, {
+                text: wifiString,
                 width: 256,
                 height: 256,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
                 correctLevel: QRCode.CorrectLevel.H
             });
-            
-            setTimeout(() => {
-                let qrCanvas = document.querySelector('#qrcode canvas');
-                let qrImage = qrCanvas.toDataURL("image/png");
-                let downloadBtn = document.getElementById('download');
-                downloadBtn.href = qrImage;
-                downloadBtn.style.display = 'block';
-            }, 500);
-        }
+        });
     </script>
 </body>
 </html>
