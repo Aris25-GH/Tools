@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PDF Comparison</title>
+</head>
+<body>
+    <h1>Upload PDFs for Comparison</h1>
+    <form action="/compare" method="post" enctype="multipart/form-data">
+        <label for="pdf1">First PDF:</label>
+        <input type="file" id="pdf1" name="pdf1" accept="application/pdf" required><br><br>
+        <label for="pdf2">Second PDF:</label>
+        <input type="file" id="pdf2" name="pdf2" accept="application/pdf" required><br><br>
+        <button type="submit">Compare</button>
+    </form>
+</body>
+</html>
