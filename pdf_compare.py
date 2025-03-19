@@ -1,9 +1,10 @@
 from flask import Flask, request, send_file, render_template
-import fitz   # PyMuPDF
+
+import fitz  # PyMuPDF
 from pdf_diff import make_diff
 import os
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='Tools', template_folder='Tools')
 
 def compare_pdfs(pdf1_path, pdf2_path, output_path):
     pdf1 = fitz.open(pdf1_path)
@@ -11,11 +12,11 @@ def compare_pdfs(pdf1_path, pdf2_path, output_path):
     diff = make_diff(pdf1, pdf2)
     diff.save(output_path)
 
-@app.route('/', methods=['GET'])
+@app.route('/')
 def index():
-    return render_template('pdf_compare.html')
+    return render_template('pdf-compare.html')  # Make sure this file exists in /Tools
 
-@app.route('/Tools/compare', methods=['POST'])
+@app.route('/compare', methods=['POST'])
 def upload_files():
     pdf1 = request.files['pdf1']
     pdf2 = request.files['pdf2']
