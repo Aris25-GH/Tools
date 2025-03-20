@@ -1,31 +1,173 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Wi-Fi QR Code Generator</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Generate QR codes for sharing your Wi-Fi SSID and password. Scan the QR code to connect to the internet automatically.">
+    <meta name="keywords" content="QR Code Generator, Wi-Fi QR Code, Share Wi-Fi, Scan QR Code">
+    <meta name="author" content="Your Name">
+    <title>Wi-Fi QR Code Generator</title>
+    <!-- Google AdSense Code -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_AD_SENSE_ID" crossorigin="anonymous"></script>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        main {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .qr-generator {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #qr-code-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .advertisement {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
-  <input type="text" id="ssid" placeholder="Enter SSID">
-  <input type="text" id="password" placeholder="Enter Password">
-  <button onclick="generateQRCode()">Generate QR Code</button>
-  <div id="qrcode"></div>
+    <header>
+        <h1>Wi-Fi QR Code Generator</h1>
+        <p>Easily share your Wi-Fi credentials by generating a QR code.</p>
+    </header>
 
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4"></script>
-  <script>
-    function generateQRCode() {
-      const ssid = document.getElementById('ssid').value;
-      const password = document.getElementById('password').value;
-      const qrData = `WIFI:S:${ssid};T:WPA;P:${password};;`;
-      QRCode.toDataURL(qrData, (err, url) => {
-        if (err) console.error(err);
-        else {
-          const img = document.createElement('img');
-          img.src = url;
-          document.getElementById('qrcode').innerHTML = '';
-          document.getElementById('qrcode').appendChild(img);
-        }
-      });
-    }
-  </script>
+    <main>
+        <section class="qr-generator">
+            <form id="wifi-form">
+                <label for="ssid">Wi-Fi SSID:</label>
+                <input type="text" id="ssid" name="ssid" placeholder="Enter your Wi-Fi SSID" required>
+
+                <label for="password">Wi-Fi Password:</label>
+                <input type="text" id="password" name="password" placeholder="Enter your Wi-Fi Password" required>
+
+                <button type="submit">Generate QR Code</button>
+            </form>
+
+            <div id="qr-code-container">
+                <!-- QR Code will be displayed here -->
+            </div>
+        </section>
+
+        <!-- AdSense Ad Unit -->
+        <section class="advertisement">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-YOUR_AD_SENSE_ID"
+                 data-ad-slot="YOUR_AD_SLOT_ID"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Wi-Fi QR Code Generator. All rights reserved.</p>
+    </footer>
+
+    <!-- QRCode.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        // JavaScript Functionality
+        document.getElementById('wifi-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const ssid = document.getElementById('ssid').value;
+            const password = document.getElementById('password').value;
+
+            // Validate inputs
+            if (!ssid || !password) {
+                alert("Please enter both SSID and Password.");
+                return;
+            }
+
+            // Generate Wi-Fi QR Code
+            const wifiString = `WIFI:S:${ssid};T:WPA;P:${password};;`;
+            const qrCodeContainer = document.getElementById('qr-code-container');
+
+            // Clear previous QR code
+            qrCodeContainer.innerHTML = '';
+
+            // Generate new QR code
+            try {
+                new QRCode(qrCodeContainer, {
+                    text: wifiString,
+                    width: 256,
+                    height: 256,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+            } catch (error) {
+                console.error("Error generating QR code:", error);
+                alert("An error occurred while generating the QR code. Please try again.");
+            }
+        });
+    </script>
 </body>
 </html>
