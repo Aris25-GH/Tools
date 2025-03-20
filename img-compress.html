@@ -182,7 +182,8 @@
                         canvas.height = img.height;
                         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-                        let selectedQuality = parseFloat(compressionLevelSelect.value);
+                        // Corrected compression logic
+                        let selectedQuality = 1.0 - parseFloat(compressionLevelSelect.value);
                         if (compressionLevelSelect.value === "auto") {
                             selectedQuality = desiredSize ? 0.7 : 0.6;
                         }
