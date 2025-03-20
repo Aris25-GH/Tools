@@ -48,9 +48,6 @@
             font-size: 0.9em;
             margin-top: 5px;
         }
-        #criteria-options {
-            display: block; /* Default visibility */
-        }
     </style>
 </head>
 <body>
@@ -68,15 +65,7 @@
             <option value="medium">Medium Complex (All Criteria, May Repeat)</option>
             <option value="high">High Complex (All Criteria, No Repeated Characters)</option>
         </select>
-        
-        <div id="criteria-options">
-            <label>Include in Password:</label>
-            <input type="checkbox" id="uppercase" checked> Uppercase Letters<br>
-            <input type="checkbox" id="lowercase" checked> Lowercase Letters<br>
-            <input type="checkbox" id="numbers" checked> Numbers<br>
-            <input type="checkbox" id="symbols" checked> Symbols<br>
-        </div>
-        
+
         <div id="error-message" class="error-message"></div>
         <button onclick="generatePassword()">Generate Password</button>
         <div id="password-output"></div>
@@ -89,27 +78,12 @@
             let complexitySelect = document.getElementById('complexity');
 
             if (userPassword.length > 0) {
-                // Disable "Less Complex" option if user provides a password
                 complexitySelect.querySelector('option[value="less"]').disabled = true;
                 if (complexitySelect.value === "less") {
-                    complexitySelect.value = "medium"; // Default to medium if less was selected
+                    complexitySelect.value = "medium";
                 }
             } else {
-                // Re-enable "Less Complex" option if no password is provided
                 complexitySelect.querySelector('option[value="less"]').disabled = false;
-            }
-            toggleCriteria(); // Update criteria options visibility
-        }
-
-        function toggleCriteria() {
-            let complexity = document.getElementById('complexity').value;
-            let criteriaOptions = document.getElementById('criteria-options');
-
-            // Show criteria options only for "Less Complex"
-            if (complexity === "less") {
-                criteriaOptions.style.display = "block";
-            } else {
-                criteriaOptions.style.display = "none";
             }
         }
 
@@ -119,73 +93,71 @@
             let complexity = document.getElementById('complexity').value;
             let errorMessage = document.getElementById('error-message');
 
-            // Check if "Less Complex" is selected and fewer than 3 criteria are chosen
-            if (complexity === "less") {
-                let criteriaCount = 0;
-                if (document.getElementById('uppercase').checked) criteriaCount++;
-                if (document.getElementById('lowercase').checked) criteriaCount++;
-                if (document.getElementById('numbers').checked) criteriaCount++;
-                if (document.getElementById('symbols').checked) criteriaCount++;
-
-                if (criteriaCount < 3) {
-                    errorMessage.innerText = "Please select at least 3 criteria for 'Less Complex' level.";
-                    return; // Stop execution if criteria are insufficient
-                }
-            } else {
-                errorMessage.innerText = ""; // Clear error message
-            }
-
             let uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             let lowercase = "abcdefghijklmnopqrstuvwxyz";
             let numbers = "0123456789";
             let symbols = "!@#$%^&*()_+{}[]|:;<>,.?/";
 
-            let allChars = "";
+            let allChars = uppercase + lowercase + numbers + symbols;
             let password = userPassword || "";
 
-            // Determine character set based on complexity
-            if (complexity === "medium" || complexity === "high") {
-                allChars = uppercase + lowercase + numbers + symbols;
-            } else {
-                if (document.getElementById('uppercase').checked) allChars += uppercase;
-                if (document.getElementById('lowercase').checked) allChars += lowercase;
-                if (document.getElementById('numbers').checked) allChars += numbers;
-                if (document.getElementById('symbols').checked) allChars += symbols;
-            }
-
-            // Ensure password meets the desired length
-            if (password.length < length) {
-                for (let i = password.length; i < length; i++) {
-                    let newChar;
-                    do {
-                        newChar = allChars.charAt(Math.floor(Math.random() * allChars.length));
-                    } while (complexity === "high" && password.slice(-1) === newChar); // Prevent consecutive repeats for high complexity
-                    password += newChar;
+            // Ensure password meets length requirement
+            while (password.length < length) {
+                let newChar = allChars.charAt(Math.floor(Math.random() * allChars.length));
+                
+                if (complexity === "high" && password.includes(newChar)) {
+                    continue; // Ensure no repeating characters for High Complexity
                 }
-            } else if (password.length > length) {
-                password = password.slice(0, length); // Truncate if longer than desired length
+                
+                password += newChar;
             }
 
-            // Ensure medium and high complexity passwords include all character types
-            if (complexity === "medium" || complexity === "high") {
-                let hasUppercase = /[A-Z]/.test(password);
-                let hasLowercase = /[a-z]/.test(password);
-                let hasNumbers = /[0-9]/.test(password);
-                let hasSymbols = /[!@#$%^&*()_+{}[\]|:;<>,.?/]/.test(password);
+            // Truncate if user password is longer than required length
+            if (password.length > length) {
+                password = password.slice(0, length);
+            }
 
-                if (!hasUppercase || !hasLowercase || !hasNumbers || !hasSymbols) {
-                    // Replace random characters with missing types
-                    let missingChars = [];
-                    if (!hasUppercase) missingChars.push(uppercase.charAt(Math.floor(Math.random() * uppercase.length)));
-                    if (!hasLowercase) missingChars.push(lowercase.charAt(Math.floor(Math.random() * lowercase.length)));
-                    if (!hasNumbers) missingChars.push(numbers.charAt(Math.floor(Math.random() * numbers.length)));
-                    if (!hasSymbols) missingChars.push(symbols.charAt(Math.floor(Math.random() * symbols.length)));
+            // Ensure Medium and High complexity passwords contain required character types
+            let hasUppercase = /[A-Z]/.test(password);
+            let hasLowercase = /[a-z]/.test(password);
+            let hasNumbers = /[0-9]/.test(password);
+            let hasSymbols = /[!@#$%^&*()_+{}[\]|:;<>,.?/]/.test(password);
 
-                    for (let i = 0; i < missingChars.length; i++) {
-                        let index = Math.floor(Math.random() * password.length);
-                        password = password.substring(0, index) + missingChars[i] + password.substring(index + 1);
+            let missingChars = [];
+            if (!hasUppercase) missingChars.push(uppercase.charAt(Math.floor(Math.random() * uppercase.length)));
+            if (!hasLowercase) missingChars.push(lowercase.charAt(Math.floor(Math.random() * lowercase.length)));
+            if (!hasNumbers) missingChars.push(numbers.charAt(Math.floor(Math.random() * numbers.length)));
+            if (!hasSymbols) missingChars.push(symbols.charAt(Math.floor(Math.random() * symbols.length)));
+
+            // Replace random characters to include missing types
+            for (let i = 0; i < missingChars.length; i++) {
+                let index = Math.floor(Math.random() * password.length);
+                password = password.substring(0, index) + missingChars[i] + password.substring(index + 1);
+            }
+
+            // If High Complexity, ensure no repeating characters at all
+            if (complexity === "high") {
+                let uniqueChars = new Set();
+                let finalPassword = "";
+                
+                for (let char of password) {
+                    if (!uniqueChars.has(char)) {
+                        finalPassword += char;
+                        uniqueChars.add(char);
+                    } else {
+                        // If the character already exists, add a new unique one
+                        let newChar;
+                        do {
+                            newChar = allChars.charAt(Math.floor(Math.random() * allChars.length));
+                        } while (uniqueChars.has(newChar)); // Ensure uniqueness
+                        finalPassword += newChar;
+                        uniqueChars.add(newChar);
                     }
+
+                    if (finalPassword.length >= length) break;
                 }
+
+                password = finalPassword;
             }
 
             document.getElementById('password-output').innerText = "Generated Password: " + password;
@@ -199,11 +171,6 @@
                 console.error("Error copying password: ", err);
             });
         }
-
-        // Initialize criteria options visibility on page load
-        window.onload = function () {
-            toggleCriteria();
-        };
     </script>
 </body>
 </html>
