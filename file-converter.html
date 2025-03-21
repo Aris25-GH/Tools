@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>All-in-One File Converter</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
+    }
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      margin-top: 0;
+      color: #333;
+    }
+    .dropdown {
+      margin-bottom: 20px;
+    }
+    select {
+      padding: 10px;
+      width: 100%;
+      font-size: 16px;
+    }
+    .tool {
+      display: none;
+      margin-top: 20px;
+    }
+    .tool.active {
+      display: block;
+    }
+    .tool input[type="file"] {
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #007BFF;
+      border: none;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .output, .progress {
+      margin-top: 10px;
+    }
+    .progress {
+      font-weight: bold;
+      color: #007BFF;
+    }
+    textarea {
+      width: 100%;
+      height: 150px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>All-in-One File Converter</h2>
+
+    <div class="dropdown">
+      <select id="toolSelector" onchange="switchTool(this.value)">
+        <option value="">-- Select Conversion Type --</option>
+        <option value="pdfToText">PDF to Text</option>
+        <option value="pdfToCSV">PDF to CSV</option>
+        <option value="pdfToExcel">PDF to Excel</option>
+        <option value="pdfToHTML">PDF to HTML</option>
+        <option value="pdfToJPG">PDF to JPG</option>
+        <option value="pdfToPNG">PDF to PNG</option>
+        <option value="pdfToJSON">PDF to JSON</option>
+        <option value="pdfToXML">PDF to XML</option>
+        <option value="pdfToWord">PDF to Word</option>
+        <option value="pdfToZIP">PDF to ZIP</option>
+        <option value="pdfToWebP">PDF to WebP</option>
+      </select>
+    </div>
+
+    <!-- Placeholder for all tools -->
+    <div id="toolsContainer"></div>
+  </div>
+
+  <script>
+    const toolList = {
+      pdfToText: "PDF to Text",
+      pdfToCSV: "PDF to CSV",
+      pdfToExcel: "PDF to Excel",
+      pdfToHTML: "PDF to HTML",
+      pdfToJPG: "PDF to JPG",
+      pdfToPNG: "PDF to PNG",
+      pdfToJSON: "PDF to JSON",
+      pdfToXML: "PDF to XML",
+      pdfToWord: "PDF to Word",
+      pdfToZIP: "PDF to ZIP",
+      pdfToWebP: "PDF to WebP"
+    };
+
+    function switchTool(toolKey) {
+      const container = document.getElementById('toolsContainer');
+      container.innerHTML = '';
+      if (!toolKey) return;
+
+      const label = toolList[toolKey];
+      const div = document.createElement('div');
+      div.className = 'tool active';
+      div.innerHTML = `
+        <h3>${label}</h3>
+        <input type="file" id="input_${toolKey}" />
+        <button onclick="handleConversion('${toolKey}')">Convert</button>
+        <div class="progress" id="progress_${toolKey}"></div>
+        <textarea id="output_${toolKey}" readonly></textarea>
+      `;
+      container.appendChild(div);
+    }
+
+    async function handleConversion(key) {
+      const input = document.getElementById(`input_${key}`);
+      const progress = document.getElementById(`progress_${key}`);
+      const output = document.getElementById(`output_${key}`);
+      const file = input.files[0];
+      if (!file) return alert('Please select a file.');
+
+      progress.textContent = 'Processing: 0%';
+      try {
+        let result;
+        switch (key) {
+          case 'pdfToText':
+            result = await pdfToText(file, progress);
+            break;
+          case 'pdfToCSV':
+            result = await pdfToCSV(file, progress);
+            break;
+          case 'pdfToExcel':
+            result = await pdfToExcel(file, progress);
+            break;
+          case 'pdfToHTML':
+            result = await pdfToHTML(file, progress);
+            break;
+          case 'pdfToJPG':
+          case 'pdfToPNG':
+          case 'pdfToWebP':
+            result = await pdfToImage(file, key.split('To')[1].toLowerCase(), progress);
+            break;
+          case 'pdfToJSON':
+            result = await pdfToJSON(file, progress);
+            break;
+          case 'pdfToXML':
+            result = await pdfToXML(file, progress);
+            break;
+          case 'pdfToWord':
+            result = await pdfToWord(file, progress);
+            break;
+          case 'pdfToZIP':
+            result = await pdfToZIP(file, progress);
+            break;
+          default:
+            throw new Error('Unsupported conversion type.');
+        }
+        progress.textContent = 'Done!';
+        output.value = result || 'Conversion completed. Check your downloads.';
+      } catch (error) {
+        progress.textContent = 'Error!';
+        output.value = `Error: ${error.message}`;
+      }
+    }
+
+    // Update progress
+    function updateProgress(progressElement, percentage) {
+      progressElement.textContent = `Processing: ${percentage}%`;
+    }
+
+    // PDF to Text
+    async function pdfToText(file, progressElement) {
+      const typedArray = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument(typedArray).promise;
+      let text = '';
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const content = await page.getTextContent();
+        text += content.items.map(item => item.str).join(' ');
+        updateProgress(progressElement, Math.round((i / pdf.numPages) * 100));
+      }
+      return text;
+    }
+
+    // PDF to CSV
+    async function pdfToCSV(file, progressElement) {
+      const text = await pdfToText(file, progressElement);
+      const rows = text.split('\n');
+      const csvContent = rows.map(row => row.split(' ').join(',')).join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      saveAs(blob, 'output.csv');
+      return 'CSV file generated. Check your downloads.';
+    }
+
+    // PDF to Excel
+    async function pdfToExcel(file, progressElement) {
+      const text = await pdfToText(file, progressElement);
+      const rows = text.split('\n');
+      const data = rows.map(row => row.split(' '));
+      const ws = XLSX.utils.aoa_to_sheet(data);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+      XLSX.writeFile(wb, 'output.xlsx');
+      return 'Excel file generated. Check your downloads.';
+    }
+
+    // PDF to HTML
+    async function pdfToHTML(file, progressElement) {
+      const text = await pdfToText(file, progressElement);
+      const htmlContent = `<html><body><pre>${text}</pre></body></html>`;
+      const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8;' });
+      saveAs(blob, 'output.html');
+      return 'HTML file generated. Check your downloads.';
+    }
+
+    // PDF to Image (JPG, PNG, WebP)
+    async function pdfToImage(file, format, progressElement) {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const img = new Image();
+        img.src = e.target.result;
+        img.onload = function () {
+          doc.addImage(img, format.toUpperCase(), 10, 10, 180, 180);
+          doc.save(`output.${format}`);
+          updateProgress(progressElement, 100);
+        };
+      };
+      reader.readAsDataURL(file);
+      return `Image (${format}) generated. Check your downloads.`;
+    }
+
+    // PDF to JSON
+    async function pdfToJSON(file, progressElement) {
+      const text = await pdfToText(file, progressElement);
+      const jsonContent = JSON.stringify({ text }, null, 2);
+      const blob = new Blob([jsonContent], { type: 'application/json;charset=utf-8;' });
+      saveAs(blob, 'output.json');
+      return 'JSON file generated. Check your downloads.';
+    }
+
+    // PDF to XML
+    async function pdfToXML(file, progressElement) {
+      const text = await pdfToText(file, progressElement);
+      const xmlContent = `<pdf><content>${text}</content></pdf>`;
+      const blob = new Blob([xmlContent], { type: 'application/xml;charset=utf-8;' });
+      saveAs(blob, 'output.xml');
+      return 'XML file generated. Check your downloads.';
+    }
+
+    // PDF to Word
+    async function pdfToWord(file, progressElement) {
+      const text = await pdfToText(file, progressElement);
+      const htmlContent = `<html><body><pre>${text}</pre></body></html>`;
+      const blob = new Blob([htmlContent], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document;charset=utf-8;' });
+      saveAs(blob, 'output.docx');
+      return 'Word file generated. Check your downloads.';
+    }
+
+    // PDF to ZIP
+    async function pdfToZIP(file, progressElement) {
+      const text = await pdfToText(file, progressElement);
+      const zip = new JSZip();
+      zip.file('output.txt', text);
+      const content = await zip.generateAsync({ type: 'blob' });
+      saveAs(content, 'output.zip');
+      return 'ZIP file generated. Check your downloads.';
+    }
+  </script>
+</body>
+</html>
