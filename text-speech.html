@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Free online Text-to-Speech tool with spell check, word count, and PDF export. Convert your text to speech easily.">
+  <meta name="keywords" content="text to speech, TTS, speech synthesis, PDF export, spell check, word count">
+  <meta name="author" content="Your Name">
+  <title>Text to Speech Tool | Convert Text to Speech and Export as PDF</title>
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=YOUR_ADSENSE_AD_UNIT_ID" crossorigin="anonymous"></script>
+  <style>
+    /* CSS Styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+
+    header {
+      background-color: #007bff;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    main {
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    textarea {
+      width: 100%;
+      height: 200px;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      resize: vertical;
+    }
+
+    .controls {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #word-count {
+      margin-left: auto;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .ad-unit {
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    footer {
+      text-align: center;
+      padding: 10px;
+      background-color: #333;
+      color: white;
+      position: fixed;
+      width: 100%;
+      bottom: 0;
+    }
+
+    .language-select,
+    .voice-select,
+    .tempo-control {
+      margin-top: 10px;
+    }
+
+    .language-select label,
+    .voice-select label,
+    .tempo-control label {
+      font-size: 16px;
+      margin-right: 10px;
+    }
+
+    .language-select select,
+    .voice-select select,
+    .tempo-control input {
+      padding: 5px;
+      font-size: 16px;
+      border-radius: 5px;
+    }
+
+    .tempo-control input {
+      width: 60px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Text to Speech Tool</h1>
+    <p>Convert your text to speech, check spelling, count words, and export as PDF.</p>
+  </header>
+
+  <main>
+    <!-- Ad Unit -->
+    <div class="ad-unit">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="YOUR_ADSENSE_AD_UNIT_ID"
+           data-ad-slot="YOUR_AD_SLOT_ID"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>
+           (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+
+    <!-- Text Input Area -->
+    <textarea id="text-input" placeholder="Enter your text here..." spellcheck="true"></textarea>
+
+    <!-- Language Selection -->
+    <div class="language-select">
+      <label for="language">Select Language:</label>
+      <select id="language">
+        <option value="en">English</option>
+        <option value="ar">Arabic</option>
+        <option value="hi">Hindi</option>
+      </select>
+    </div>
+
+    <!-- Voice Selection -->
+    <div class="voice-select">
+      <label for="voice">Select Voice:</label>
+      <select id="voice"></select>
+    </div>
+
+    <!-- Tempo Control -->
+    <div class="tempo-control">
+      <label for="tempo">Speech Tempo:</label>
+      <input type="number" id="tempo" min="0.5" max="2" step="0.1" value="1">
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <button id="speak-btn">Speak</button>
+      <button id="spell-check-btn">Check Spelling</button>
+      <button id="export-pdf-btn">Export as PDF</button>
+      <span id="word-count">Words: 0</span>
+    </div>
+
+    <!-- Ad Unit -->
+    <div class="ad-unit">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="YOUR_ADSENSE_AD_UNIT_ID"
+           data-ad-slot="YOUR_AD_SLOT_ID"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>
+           (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2023 Text to Speech Tool. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // JavaScript Functionality
+    document.addEventListener('DOMContentLoaded', () => {
+      const textInput = document.getElementById('text-input');
+      const speakBtn = document.getElementById('speak-btn');
+      const spellCheckBtn = document.getElementById('spell-check-btn');
+      const exportPdfBtn = document.getElementById('export-pdf-btn');
+      const wordCount = document.getElementById('word-count');
+      const languageSelect = document.getElementById('language');
+      const voiceSelect = document.getElementById('voice');
+      const tempoControl = document.getElementById('tempo');
+
+      let voices = [];
+      let selectedVoice = null;
+
+      // Update word count
+      textInput.addEventListener('input', () => {
+        const text = textInput.value.trim();
+        const words = text ? text.split(/\s+/).length : 0;
+        wordCount.textContent = `Words: ${words}`;
+      });
+
+      // Load available voices
+      function loadVoices() {
+        voices = window.speechSynthesis.getVoices();
+        voiceSelect.innerHTML = '';
+        voices.forEach((voice, index) => {
+          const option = document.createElement('option');
+          option.value = index;
+          option.textContent = `${voice.name} (${voice.lang}) - ${voice.gender || 'Unknown'}`;
+          voiceSelect.appendChild(option);
+        });
+        selectedVoice = voices[0]; // Default to the first voice
+      }
+
+      // Populate voices when they are loaded
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+
+      // Handle voice selection
+      voiceSelect.addEventListener('change', () => {
+        selectedVoice = voices[voiceSelect.value];
+      });
+
+      // Text-to-Speech
+      speakBtn.addEventListener('click', () => {
+        const text = textInput.value;
+        const language = languageSelect.value;
+        const tempo = parseFloat(tempoControl.value);
+
+        if (text) {
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = language; // Set the selected language
+          utterance.voice = selectedVoice; // Set the selected voice
+          utterance.rate = tempo; // Set the speech tempo
+          window.speechSynthesis.speak(utterance);
+        }
+      });
+
+      // Spell Check
+      spellCheckBtn.addEventListener('click', () => {
+        textInput.focus();
+        textInput.spellcheck = true;
+      });
+
+      // Export as PDF
+      exportPdfBtn.addEventListener('click', () => {
+        const text = textInput.value;
+        if (text) {
+          const { jsPDF } = window.jspdf;
+          const doc = new jsPDF();
+          doc.text(text, 10, 10);
+          doc.save('text-to-speech-output.pdf');
+        }
+      });
+    });
+  </script>
+  <!-- jsPDF Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</body>
+</html>
