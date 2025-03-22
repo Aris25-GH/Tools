@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Convert speech to text effortlessly with our free online tool. Get accurate transcriptions, spell-checked text, and export to PDF or TXT.">
+  <meta name="keywords" content="speech to text, voice to text, transcription, PDF export, TXT export, spell check, word count">
+  <meta name="author" content="Your Name">
+  <title>Speech to Text Converter | Free Online Tool</title>
+  <style>
+    /* CSS for Responsiveness */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+
+    header {
+      background-color: #007BFF;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    main {
+      padding: 20px;
+    }
+
+    .tool-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      border: none;
+      background-color: #007BFF;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    textarea {
+      width: 100%;
+      height: 200px;
+      margin-top: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      resize: vertical;
+    }
+
+    .ad-container {
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    footer {
+      text-align: center;
+      padding: 10px;
+      background-color: #007BFF;
+      color: white;
+      position: fixed;
+      width: 100%;
+      bottom: 0;
+    }
+  </style>
+  <!-- Include jsPDF Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Speech to Text Converter</h1>
+    <p>Speak, and get your text in PDF or TXT format with spell check and word count.</p>
+  </header>
+
+  <main>
+    <!-- AdSense Ad Unit -->
+    <div class="ad-container">
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_AD_SENSE_ID" crossorigin="anonymous"></script>
+      <!-- Ad Unit -->
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-YOUR_AD_SENSE_ID"
+           data-ad-slot="YOUR_AD_SLOT_ID"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>
+           (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+
+    <!-- Speech to Text Interface -->
+    <div class="tool-container">
+      <label for="language-select">Select Language:</label>
+      <select id="language-select">
+        <option value="en-US">English (United States)</option>
+        <option value="ar-SA">Arabic (Saudi Arabia)</option>
+        <option value="hi-IN">Hindi (India)</option>
+      </select>
+      <button id="start-btn">Start Speaking</button>
+      <button id="stop-btn" disabled>Stop</button>
+      <button id="spell-check-btn">Spell Check</button>
+      <button id="export-pdf-btn">Export to PDF</button>
+      <button id="export-txt-btn">Export to TXT</button>
+      <p id="word-count">Word Count: 0</p>
+      <textarea id="output-text" placeholder="Your transcribed text will appear here..." readonly></textarea>
+    </div>
+
+    <!-- AdSense Ad Unit -->
+    <div class="ad-container">
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_AD_SENSE_ID" crossorigin="anonymous"></script>
+      <!-- Ad Unit -->
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-YOUR_AD_SENSE_ID"
+           data-ad-slot="YOUR_AD_SLOT_ID"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>
+           (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2023 Speech to Text Converter. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // JavaScript for Functionality
+    const startBtn = document.getElementById('start-btn');
+    const stopBtn = document.getElementById('stop-btn');
+    const spellCheckBtn = document.getElementById('spell-check-btn');
+    const exportPdfBtn = document.getElementById('export-pdf-btn');
+    const exportTxtBtn = document.getElementById('export-txt-btn');
+    const outputText = document.getElementById('output-text');
+    const wordCount = document.getElementById('word-count');
+    const languageSelect = document.getElementById('language-select');
+
+    let recognition;
+    let isListening = false;
+
+    // Initialize Speech Recognition
+    if ('webkitSpeechRecognition' in window) {
+      recognition = new webkitSpeechRecognition();
+      recognition.continuous = true; // Keep listening until stopped
+      recognition.interimResults = false; // Only final results
+      recognition.lang = languageSelect.value; // Set default language
+
+      recognition.onstart = () => {
+        isListening = true;
+        startBtn.disabled = true;
+        stopBtn.disabled = false;
+        console.log('Speech recognition started');
+      };
+
+      recognition.onresult = (event) => {
+        let transcript = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          transcript += event.results[i][0].transcript;
+        }
+        // Append new transcript to the existing text
+        outputText.value += transcript + '. '; // Add a period after each sentence
+        updateWordCount();
+      };
+
+      recognition.onend = () => {
+        isListening = false;
+        startBtn.disabled = false;
+        stopBtn.disabled = true;
+        console.log('Speech recognition ended');
+      };
+
+      recognition.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+        alert('An error occurred: ' + event.error);
+      };
+    } else {
+      alert('Speech recognition is not supported in this browser. Please use Google Chrome or Microsoft Edge.');
+    }
+
+    // Update Language
+    languageSelect.addEventListener('change', () => {
+      if (recognition) {
+        recognition.lang = languageSelect.value;
+      }
+    });
+
+    // Start Listening
+    startBtn.addEventListener('click', async () => {
+      if (recognition) {
+        try {
+          // Request microphone access
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          outputText.value = ''; // Clear previous text when starting
+          recognition.start();
+        } catch (error) {
+          console.error('Microphone access denied:', error);
+          alert('Microphone access denied. Please allow microphone access in your browser settings.');
+        }
+      } else {
+        alert('Speech recognition not initialized.');
+      }
+    });
+
+    // Stop Listening
+    stopBtn.addEventListener('click', () => {
+      if (recognition) {
+        recognition.stop();
+      }
+    });
+
+    // Spell Check
+    spellCheckBtn.addEventListener('click', () => {
+      const text = outputText.value;
+      const correctedText = spellCheck(text);
+      outputText.value = correctedText;
+      updateWordCount();
+    });
+
+    // Export to PDF
+    exportPdfBtn.addEventListener('click', () => {
+      const text = outputText.value;
+      const doc = new jspdf.jsPDF();
+      doc.setFontSize(12);
+      doc.text(text, 10, 10);
+      doc.save('transcription.pdf');
+    });
+
+    // Export to TXT
+    exportTxtBtn.addEventListener('click', () => {
+      const text = outputText.value;
+      const element = document.createElement('a');
+      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+      element.setAttribute('download', 'transcription.txt');
+      element.style.display = 'none';
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+    });
+
+    // Update Word Count
+    function updateWordCount() {
+      const text = outputText.value;
+      const words = text.split(/\s+/).filter(word => word.length > 0);
+      wordCount.textContent = `Word Count: ${words.length}`;
+    }
+
+    // Simple Spell Check (for demonstration)
+    function spellCheck(text) {
+      // Replace with a proper spell-check API or library
+      return text.replace(/teh/g, 'the').replace(/adn/g, 'and');
+    }
+  </script>
+</body>
+</html>
