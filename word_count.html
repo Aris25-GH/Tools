@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Free unlimited Word Counter & Character Count Tool with real-time updates, spell check, and repeated word analysis. Perfect for writers, students, and professionals.">
+    <meta name="description" content="Free Word Counter & Character Count Tool with real-time updates, spell check, repeated word analysis, and language detection. No API keys required.">
     <meta name="keywords" content="word counter, character count, online tool, writing assistant, spell check, repeated words">
-    <title>Word & Character Counter - Free Unlimited Text Analysis Tool</title>
+    <title>Free Word & Character Counter - Advanced Text Analysis Tool</title>
     <style>
         * {
             box-sizing: border-box;
@@ -149,11 +149,13 @@
             }
         }
     </style>
+    <!-- Include Franc for language detection -->
+    <script src="https://cdn.jsdelivr.net/npm/franc-min@6.0.0/franc.min.js"></script>
 </head>
 <body>
     <div class="container">
         <div class="main-content">
-            <h1>Word & Character Counter</h1>
+            <h1>Free Word & Character Counter</h1>
             <textarea class="text-input" id="textInput" placeholder="Start typing or paste your text here..." spellcheck="true"></textarea>
             
             <div class="counter-container">
@@ -177,6 +179,10 @@
                     <div class="counter-label">Unique Words</div>
                     <div class="counter-value" id="uniqueCount">0</div>
                 </div>
+                <div class="counter-box">
+                    <div class="counter-label">Detected Language</div>
+                    <div class="counter-value" id="language">-</div>
+                </div>
             </div>
 
             <div class="repeated-words">
@@ -193,7 +199,26 @@
         const alphaCount = document.getElementById('alphaCount');
         const numberCount = document.getElementById('numberCount');
         const uniqueCount = document.getElementById('uniqueCount');
+        const language = document.getElementById('language');
         const wordList = document.getElementById('wordList');
+
+        // Function to detect language using Franc
+        function detectLanguage(text) {
+            if (!text.trim()) {
+                language.textContent = '-';
+                return;
+            }
+
+            const langCode = franc(text);
+            if (langCode === 'und') {
+                language.textContent = 'Unknown';
+                return;
+            }
+
+            // Map language code to full name
+            const langName = new Intl.DisplayNames(['en'], { type: 'language' }).of(langCode);
+            language.textContent = langName || 'Unknown';
+        }
 
         function updateCounts() {
             const text = textInput.value;
@@ -239,6 +264,9 @@
                     </div>
                 `).join('')
                 : '<div class="word-item">No repeated words found</div>';
+
+            // Detect language
+            detectLanguage(text);
         }
 
         textInput.addEventListener('input', updateCounts);
