@@ -1,1 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Advanced online dictionary with definitions, examples, translations, and pronunciation.">
+    <meta name="keywords" content="dictionary, Arabic dictionary, translations, pronunciation, SEO, Google AdSense">
+    <title>Advanced Dictionary</title>
+    <style>
+        /* CSS Styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
 
+        header {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        main {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        #search-section {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #word-input {
+            padding: 12px;
+            width: 80%;
+            max-width: 400px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        #search-btn, #translate-btn {
+            padding: 12px 24px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: #fff;
+            transition: background-color 0.3s ease;
+        }
+
+        #search-btn:hover, #translate-btn:hover {
+            background-color: #45a049;
+        }
+
+        #ad-section {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        #results-section, #translation-section {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        #word-info, #examples, #translation-result {
+            margin-bottom: 20px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            background-color: #333;
+            color: #fff;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+
+        .pronounce-btn {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-left: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .pronounce-btn:hover {
+            background-color: #0056b3;
+        }
+
+        @media (max-width: 600px) {
+            #word-input {
+                width: 100%;
+            }
+
+            #search-btn, #translate-btn {
+                width: 100%;
+                margin: 5px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HTML Structure -->
+    <header>
+        <h1>Advanced Dictionary</h1>
+    </header>
+    <main>
+        <!-- Search Section -->
+        <section id="search-section">
+            <input type="text" id="word-input" placeholder="Enter a word...">
+            <button id="search-btn">Search Meaning</button>
+            <button id="translate-btn">Translate Arabic to English</button>
+        </section>
+
+        <!-- AdSense Ad Section -->
+        <section id="ad-section">
+            <!-- Google AdSense Ad Unit -->
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_AD_SENSE_ID"
+                    crossorigin="anonymous"></script>
+            <!-- Ad Unit -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-YOUR_AD_SENSE_ID"
+                 data-ad-slot="YOUR_AD_SLOT_ID"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </section>
+
+        <!-- Results Section -->
+        <section id="results-section">
+            <div id="word-info"></div>
+            <div id="examples"></div>
+        </section>
+
+        <!-- Translation Section -->
+        <section id="translation-section">
+            <h2>Translation Result</h2>
+            <div id="translation-result"></div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2023 Advanced Dictionary. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript Functionality -->
+    <script>
+        // Dictionary API (English)
+        document.getElementById('search-btn').addEventListener('click', function() {
+            const word = document.getElementById('word-input').value;
+            if (word) {
+                fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        displayWordInfo(data[0]);
+                        displayExamples(data[0]);
+                        pronounceWord(word, 'en-GB'); // Pronounce in UK English
+                    })
+                    .catch(error => {
+                        console.error('Error fetching the word data:', error);
+                        document.getElementById('word-info').innerHTML = '<p>Word not found. Please try another word.</p>';
+                        document.getElementById('examples').innerHTML = '';
+                    });
+            }
+        });
+
+        // Translation API (Arabic to English)
+        document.getElementById('translate-btn').addEventListener('click', function() {
+            const word = document.getElementById('word-input').value;
+            if (word) {
+                fetch(`https://api.mymemory.translated.net/get?q=${word}&langpair=ar|en`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const translatedText = data.responseData.translatedText;
+                        document.getElementById('translation-result').innerHTML = `
+                            <p><strong>Translation:</strong> ${translatedText}</p>
+                            <p><strong>English Word:</strong> ${translatedText} <button class="pronounce-btn" onclick="pronounceWord('${translatedText}', 'en-GB')">Pronounce</button></p>
+                        `;
+                        pronounceWord(word, 'ar-SA'); // Pronounce in Saudi Arabic
+                        fetchExampleSentences(translatedText); // Fetch example sentences for the translated word
+                    })
+                    .catch(error => {
+                        console.error('Error fetching translation:', error);
+                        document.getElementById('translation-result').innerHTML = '<p>Translation failed. Please try again.</p>';
+                    });
+            }
+        });
+
+        // Display Word Info
+        function displayWordInfo(data) {
+            const wordInfo = document.getElementById('word-info');
+            wordInfo.innerHTML = `
+                <h2>${data.word}</h2>
+                <p><strong>Phonetic:</strong> ${data.phonetic || 'N/A'}</p>
+                <p><strong>Meanings:</strong></p>
+                <ul>
+                    ${data.meanings.map(meaning => `
+                        <li>
+                            <strong>${meaning.partOfSpeech}</strong>
+                            <ul>
+                                ${meaning.definitions.map(def => `
+                                    <li>${def.definition}</li>
+                                `).join('')}
+                            </ul>
+                        </li>
+                    `).join('')}
+                </ul>
+            `;
+        }
+
+        // Display Examples
+        function displayExamples(data) {
+            const examples = document.getElementById('examples');
+            examples.innerHTML = `
+                <h3>Examples:</h3>
+                <ul>
+                    ${data.meanings.map(meaning => `
+                        ${meaning.definitions.map(def => def.example ? `
+                            <li>${def.example}</li>
+                        ` : '').join('')}
+                    `).join('')}
+                </ul>
+            `;
+        }
+
+        // Fetch Example Sentences for Translated Word
+        function fetchExampleSentences(word) {
+            fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
+                .then(response => response.json())
+                .then(data => {
+                    const examples = document.getElementById('examples');
+                    examples.innerHTML = `
+                        <h3>Examples:</h3>
+                        <ul>
+                            ${data[0].meanings.map(meaning => `
+                                ${meaning.definitions.map(def => def.example ? `
+                                    <li>${def.example}</li>
+                                ` : '').join('')}
+                            `).join('')}
+                        </ul>
+                    `;
+                })
+                .catch(error => {
+                    console.error('Error fetching example sentences:', error);
+                });
+        }
+
+        // Pronounce Word (Text-to-Speech)
+        function pronounceWord(word, lang) {
+            const utterance = new SpeechSynthesisUtterance(word);
+            utterance.lang = lang; // Set language (en-GB for UK English, ar-SA for Saudi Arabic)
+            speechSynthesis.speak(utterance);
+        }
+    </script>
+</body>
+</html>
