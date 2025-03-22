@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Free Word Counter & Character Count Tool with real-time updates, spell check, repeated word analysis, and language detection. No API keys required.">
+    <meta name="description" content="Free Word Counter & Character Count Tool with real-time updates, spell check, repeated word analysis, and language detection. Export results to TXT and PDF.">
     <meta name="keywords" content="word counter, character count, online tool, writing assistant, spell check, repeated words">
-    <title>Free Word & Character Counter - Advanced Text Analysis Tool</title>
+    <title>Free Word & Character Counter - Export Results to TXT and PDF</title>
     <style>
         * {
             box-sizing: border-box;
@@ -131,6 +131,28 @@
             font-weight: bold;
         }
 
+        .export-buttons {
+            margin-top: 30px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .export-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #3498db;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .export-button:hover {
+            background-color: #2980b9;
+        }
+
         @media (max-width: 768px) {
             h1 {
                 font-size: 2rem;
@@ -147,10 +169,17 @@
             .counter-value {
                 font-size: 28px;
             }
+
+            .export-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
         }
     </style>
     <!-- Include Franc for language detection -->
     <script src="https://cdn.jsdelivr.net/npm/franc-min@6.0.0/franc.min.js"></script>
+    <!-- Include jsPDF for PDF export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -189,6 +218,11 @@
                 <h3>Repeated Words:</h3>
                 <div class="word-list" id="wordList"></div>
             </div>
+
+            <div class="export-buttons">
+                <button class="export-button" id="exportTxt">Export Results as TXT</button>
+                <button class="export-button" id="exportPdf">Export Results as PDF</button>
+            </div>
         </div>
     </div>
 
@@ -201,6 +235,8 @@
         const uniqueCount = document.getElementById('uniqueCount');
         const language = document.getElementById('language');
         const wordList = document.getElementById('wordList');
+        const exportTxt = document.getElementById('exportTxt');
+        const exportPdf = document.getElementById('exportPdf');
 
         // Function to detect language using Franc
         function detectLanguage(text) {
@@ -219,6 +255,60 @@
             const langName = new Intl.DisplayNames(['en'], { type: 'language' }).of(langCode);
             language.textContent = langName || 'Unknown';
         }
+
+        // Function to generate results as a string
+        function generateResults() {
+            const text = textInput.value;
+            const words = text.trim().split(/\s+/);
+            const wordMap = {};
+            words.forEach(word => {
+                const cleanWord = word.toLowerCase().replace(/[.,!?;:()"'-]/g, '');
+                if (cleanWord) {
+                    wordMap[cleanWord] = (wordMap[cleanWord] || 0) + 1;
+                }
+            });
+            const repeatedWords = Object.entries(wordMap)
+                .filter(([word, count]) => count > 1)
+                .sort((a, b) => b[1] - a[1]);
+
+            let results = `Word & Character Counter Results\n\n`;
+            results += `Input Text:\n${text}\n\n`;
+            results += `Words: ${wordCount.textContent}\n`;
+            results += `Characters: ${charCount.textContent}\n`;
+            results += `Alphabets: ${alphaCount.textContent}\n`;
+            results += `Numbers: ${numberCount.textContent}\n`;
+            results += `Unique Words: ${uniqueCount.textContent}\n`;
+            results += `Detected Language: ${language.textContent}\n\n`;
+            results += `Repeated Words:\n`;
+            repeatedWords.forEach(([word, count]) => {
+                results += `${word}: ${count}\n`;
+            });
+
+            return results;
+        }
+
+        // Export to TXT
+        exportTxt.addEventListener('click', () => {
+            const results = generateResults();
+            const blob = new Blob([results], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'word_counter_results.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        // Export to PDF
+        exportPdf.addEventListener('click', () => {
+            const results = generateResults();
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.setFontSize(12);
+            const lines = doc.splitTextToSize(results, 180); // Wrap text to fit page width
+            doc.text(lines, 10, 10);
+            doc.save('word_counter_results.pdf');
+        });
 
         function updateCounts() {
             const text = textInput.value;
