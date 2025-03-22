@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Advanced Birthday Calculator - Calculate the number of days, weeks, years, and weekdays between two dates.">
+    <meta name="keywords" content="birthday calculator, date calculator, age calculator, weekday counter">
+    <meta name="author" content="Your Name">
+    <title>Advanced Date (ex. birthday) Calculator</title>
+    <!-- Google AdSense Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_ADSENSE_ID" crossorigin="anonymous"></script>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        main {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .calculator {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #results {
+            margin-top: 20px;
+        }
+
+        #weekdays {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #weekdays li {
+            margin-bottom: 10px;
+        }
+
+        .ad-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Advanced Date (ex. birthday) Calculator</h1>
+    </header>
+
+    <main>
+        <!-- AdSense Ad Unit -->
+        <div class="ad-container">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-YOUR_ADSENSE_ID"
+                 data-ad-slot="YOUR_AD_UNIT_ID"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
+        <div class="calculator">
+            <label for="start-date">Start Date (Birthday):</label>
+            <input type="date" id="start-date" required>
+
+            <label for="end-date">End Date:</label>
+            <input type="date" id="end-date" required>
+
+            <button onclick="calculate()">Calculate</button>
+
+            <div id="results">
+                <h2>Results</h2>
+                <p><strong>Total Days:</strong> <span id="total-days">0</span></p>
+                <p><strong>Total Weeks:</strong> <span id="total-weeks">0</span></p>
+                <p><strong>Total Years:</strong> <span id="total-years">0</span></p>
+                <p><strong>Weekdays:</strong></p>
+                <ul id="weekdays">
+                    <li>Mondays: <span id="mondays">0</span></li>
+                    <li>Tuesdays: <span id="tuesdays">0</span></li>
+                    <li>Wednesdays: <span id="wednesdays">0</span></li>
+                    <li>Thursdays: <span id="thursdays">0</span></li>
+                    <li>Fridays: <span id="fridays">0</span></li>
+                    <li>Saturdays: <span id="saturdays">0</span></li>
+                    <li>Sundays: <span id="sundays">0</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- AdSense Ad Unit -->
+        <div class="ad-container">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-YOUR_ADSENSE_ID"
+                 data-ad-slot="YOUR_AD_UNIT_ID"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Advanced Date / Birthday Calculator. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function calculate() {
+            const startDate = new Date(document.getElementById('start-date').value);
+            const endDate = new Date(document.getElementById('end-date').value);
+
+            if (isNaN(startDate) || isNaN(endDate)) {
+                alert("Please enter valid dates.");
+                return;
+            }
+
+            const timeDifference = endDate - startDate;
+            const totalDays = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+            const totalWeeks = Math.floor(totalDays / 7);
+            const totalYears = Math.floor(totalDays / 365);
+
+            document.getElementById('total-days').textContent = totalDays;
+            document.getElementById('total-weeks').textContent = totalWeeks;
+            document.getElementById('total-years').textContent = totalYears;
+
+            // Calculate weekdays
+            const weekdays = [0, 0, 0, 0, 0, 0, 0]; // [Mon, Tue, Wed, Thu, Fri, Sat, Sun]
+            for (let i = 0; i <= totalDays; i++) {
+                const currentDate = new Date(startDate);
+                currentDate.setDate(startDate.getDate() + i);
+                const dayOfWeek = currentDate.getDay(); // 0=Sun, 1=Mon, ..., 6=Sat
+                weekdays[(dayOfWeek + 6) % 7]++; // Shift to make Monday=0
+            }
+
+            document.getElementById('mondays').textContent = weekdays[0];
+            document.getElementById('tuesdays').textContent = weekdays[1];
+            document.getElementById('wednesdays').textContent = weekdays[2];
+            document.getElementById('thursdays').textContent = weekdays[3];
+            document.getElementById('fridays').textContent = weekdays[4];
+            document.getElementById('saturdays').textContent = weekdays[5];
+            document.getElementById('sundays').textContent = weekdays[6];
+        }
+    </script>
+</body>
+</html>
