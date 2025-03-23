@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>PDF Decrypt</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; }
+    h1 { color: #2c3e50; }
+    button {
+      padding: 10px 20px;
+      margin-top: 10px;
+      margin-right: 10px;
+      cursor: pointer;
+    }
+    .progress { margin-top: 15px; color: green; }
+    .pdf-page {
+      width: 794px; /* A4 width @ 96dpi */
+      height: 1123px; /* A4 height @ 96dpi */
+      overflow: hidden;
+      position: relative;
+    }
+    .pdf-page img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <h1>PDF Decrypt</h1>
+
+  <input type="file" id="input_pdf" accept=".pdf" />
+  <br />
+  <button onclick="reprintAndDownload()">Reprint & Download PDF</button>
+  <button onclick="refreshPage()">🔄 Refresh</button>
+
+  <div class="progress" id="progress"></div>
+
+  <!-- Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <!-- Logic -->
+  <script>
+    async function reprintAndDownload() {
+      const input = document.getElementById('input_pdf');
+      const file = input.files[0];
+      const progress = document.getElementById('progress');
+
+      if (!file) return alert('Please select a PDF file.');
+      progress.textContent = 'Loading PDF...';
+
+      const typedArray = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({ data: typedArray }).promise;
+
+      const container = document.createElement('div');
+      container.style.width = '794px';
+      container.style.margin = '0 auto';
+
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const percent = Math.round((i - 1) / pdf.numPages * 100);
+        progress.textContent = `Rendering page ${i} of ${pdf.numPages} (${percent}%)...`;
+
+        const page = await pdf.getPage(i);
+        const viewport = page.getViewport({ scale: 2 });
+
+        const canvas = document.createElement('canvas');
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+        const ctx = canvas.getContext('2d');
+
+        await page.render({ canvasContext: ctx, viewport }).promise;
+
+        const img = document.createElement('img');
+        img.src = canvas.toDataURL('image/jpeg', 1.0);
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'pdf-page';
+        wrapper.appendChild(img);
+
+        container.appendChild(wrapper);
+      }
+
+      progress.textContent = 'Generating PDF...';
+      document.body.appendChild(container);
+
+      await html2pdf().set({
+        margin: 0,
+        filename: 'reprinted.pdf',
+        image: { type: 'jpeg', quality: 1.0 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }
+      }).from(container).save();
+
+      progress.textContent = '✅ Done! Downloaded reprinted PDF.';
+      container.remove();
+    }
+
+    function refreshPage() {
+      location.reload(); // Quick and clean page reload
+    }
+  </script>
+</body>
+</html>
