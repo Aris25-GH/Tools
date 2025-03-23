@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HRA Calculator</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f9;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .calculator-container {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+    h1 {
+      text-align: center;
+      color: #4a90e2;
+      margin-bottom: 1.5rem;
+    }
+    .input-group {
+      margin-bottom: 1rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      background-color: #4a90e2;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #357abd;
+    }
+    .result-container {
+      margin-top: 2rem;
+      padding: 1rem;
+      background-color: #f9f9f9;
+      border-radius: 5px;
+    }
+    .result-container h2 {
+      margin-bottom: 1rem;
+      color: #333;
+    }
+    .result-container p {
+      margin: 0.5rem 0;
+      font-size: 1rem;
+    }
+    .result-container span {
+      font-weight: bold;
+      color: #4a90e2;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator-container">
+    <h1>HRA Calculator</h1>
+    <form id="hra-form">
+      <div class="input-group">
+        <label for="basic-salary">Basic Salary (₹):</label>
+        <input type="number" id="basic-salary" required>
+      </div>
+      <div class="input-group">
+        <label for="hra-received">HRA Received (₹):</label>
+        <input type="number" id="hra-received" required>
+      </div>
+      <div class="input-group">
+        <label for="rent-paid">Rent Paid (₹):</label>
+        <input type="number" id="rent-paid" required>
+      </div>
+      <div class="input-group">
+        <label for="metro-city">Metro City:</label>
+        <input type="checkbox" id="metro-city">
+      </div>
+      <button type="submit">Calculate</button>
+    </form>
+    <div id="result" class="result-container">
+      <h2>Results</h2>
+      <p><strong>Exempt HRA:</strong> <span id="exempt-hra">₹0.00</span></p>
+    </div>
+  </div>
+  <script>
+    document.getElementById('hra-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const basicSalary = parseFloat(document.getElementById('basic-salary').value);
+      const hraReceived = parseFloat(document.getElementById('hra-received').value);
+      const rentPaid = parseFloat(document.getElementById('rent-paid').value);
+      const isMetroCity = document.getElementById('metro-city').checked;
+
+      const hra1 = hraReceived;
+      const hra2 = rentPaid - (isMetroCity ? 0.5 : 0.4) * basicSalary;
+      const hra3 = 0.5 * basicSalary;
+
+      const exemptHRA = Math.min(hra1, hra2, hra3);
+
+      document.getElementById('exempt-hra').textContent = `₹${exemptHRA.toFixed(2)}`;
+    });
+  </script>
+</body>
+</html>
