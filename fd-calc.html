@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fixed Deposit Calculator</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f9;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .calculator-container {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+    h1 {
+      text-align: center;
+      color: #4a90e2;
+      margin-bottom: 1.5rem;
+    }
+    .input-group {
+      margin-bottom: 1rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      background-color: #4a90e2;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #357abd;
+    }
+    .result-container {
+      margin-top: 2rem;
+      padding: 1rem;
+      background-color: #f9f9f9;
+      border-radius: 5px;
+    }
+    .result-container h2 {
+      margin-bottom: 1rem;
+      color: #333;
+    }
+    .result-container p {
+      margin: 0.5rem 0;
+      font-size: 1rem;
+    }
+    .result-container span {
+      font-weight: bold;
+      color: #4a90e2;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator-container">
+    <h1>Fixed Deposit Calculator</h1>
+    <form id="fd-form">
+      <div class="input-group">
+        <label for="principal">Principal Amount (₹):</label>
+        <input type="number" id="principal" required>
+      </div>
+      <div class="input-group">
+        <label for="interest-rate">Annual Interest Rate (%):</label>
+        <input type="number" id="interest-rate" step="0.1" required>
+      </div>
+      <div class="input-group">
+        <label for="tenure">Tenure (Years):</label>
+        <input type="number" id="tenure" required>
+      </div>
+      <button type="submit">Calculate</button>
+    </form>
+    <div id="result" class="result-container">
+      <h2>Results</h2>
+      <p><strong>Maturity Amount:</strong> <span id="maturity-amount">₹0.00</span></p>
+      <p><strong>Total Interest:</strong> <span id="total-interest">₹0.00</span></p>
+    </div>
+  </div>
+  <script>
+    document.getElementById('fd-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const principal = parseFloat(document.getElementById('principal').value);
+      const interestRate = parseFloat(document.getElementById('interest-rate').value);
+      const tenure = parseFloat(document.getElementById('tenure').value);
+
+      const maturityAmount = principal * Math.pow(1 + interestRate / 100, tenure);
+      const totalInterest = maturityAmount - principal;
+
+      document.getElementById('maturity-amount').textContent = `₹${maturityAmount.toFixed(2)}`;
+      document.getElementById('total-interest').textContent = `₹${totalInterest.toFixed(2)}`;
+    });
+  </script>
+</body>
+</html>
