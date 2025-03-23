@@ -1,552 +1,936 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Free online tools for image and PDF processing, file conversion, QR code generation, and more. Compress, resize, merge, split, and convert files effortlessly.">
-  <meta name="keywords" content="image compression, PDF compression, image resizer, PDF merger, image converter, PDF splitter, QR code generator, QR Wi-Fi Sharing, QR WiFi code, file converter, PDF decrypt, password generator, PDF comparer, PDF searchable text, PDF Decrypt, PDF Encrypt, PDF remove password protection">
-  <meta name="author" content="Your Website Name">
-  <title>Free Online Tools - Image & PDF Processing, File Conversion</title>
-  <!-- Font Awesome for Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <title>Free Online Tools - PDF, Image, Converter, Calculator</title>
+
+  <meta name="description" content="Free Online Tools for PDF, Image, Calculators, File Conversion & Utilities. Compress, Convert, Calculate, Extract, and Generate in one place.">
+  <meta name="keywords" content="online tools, free PDF tools, calculator, image tools, word count, file converter, PDF converter, compress image, PDF to Word, PDF to Excel, secure, fast tools, no signup tools">
+  <meta name="author" content="Free Tools Web App">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="Free Online Tools - Convert, Compress, Calculate & More">
+  <meta property="og:description" content="Use 50+ powerful tools including PDF, Image, Calculator, and Utility tools, all in one place. Safe, fast, and free.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://yourdomain.com">
+  <meta property="og:image" content="https://yourdomain.com/assets/preview.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Free Online Tools">
+  <meta name="twitter:description" content="50+ free tools including converters, calculators, and PDF tools. No signup needed.">
+  <meta name="twitter:image" content="https://yourdomain.com/assets/preview.jpg">
+  <link rel="canonical" href="https://yourdomain.com">
+
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script>
+    // Theme toggle
+    
+    window.onload = () => {
+      if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
+    };
+  </script>
   <style>
-    /* General Styles */
-    body {
-      font-family: 'Arial', sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f4f4f9;
-      color: #333;
-      line-height: 1.6;
+    .line-clamp-2 {
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
     }
-
-    .container {
-      width: 90%;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    header {
-      background: linear-gradient(135deg, #4a90e2, #357abd);
-      color: #fff;
-      padding: 40px 0;
-      text-align: center;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 2.5rem;
-      font-weight: 700;
-    }
-
-    header p {
-      margin: 10px 0 0;
-      font-size: 1.2rem;
-      font-weight: 300;
-    }
-
-    .intro {
-      text-align: center;
-      margin: 40px 0;
-      font-size: 1.1rem;
-      color: #555;
-    }
-
-    /* Tools Grid */
-    .tools-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 25px;
-      padding: 40px 0;
-    }
-
-    .tool-card {
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      padding: 25px;
-      text-align: center;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .tool-card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    }
-
-    .tool-card i {
-      font-size: 2.5rem;
-      color: #4a90e2;
-      margin-bottom: 15px;
-    }
-
-    .tool-card h2 {
-      font-size: 1.5rem;
-      margin: 0 0 10px;
-      color: #333;
-    }
-
-    .tool-card p {
-      font-size: 1rem;
-      color: #666;
-      margin: 0 0 15px;
-    }
-
-    .btn {
-      display: inline-block;
-      margin-top: 15px;
-      padding: 10px 20px;
-      background: #4a90e2;
-      color: #fff;
-      text-decoration: none;
-      border-radius: 5px;
-      transition: background 0.3s ease;
-    }
-
-    .btn:hover {
-      background: #357abd;
-    }
-
-    /* Ad Styles */
-    .ad-banner, .ad-square {
-      margin: 20px 0;
-      text-align: center;
-    }
-
-    /* Footer */
-    footer {
-      background: #333;
-      color: #fff;
-      text-align: center;
-      padding: 20px 0;
-      margin-top: 40px;
-    }
-
-    footer p {
-      margin: 0;
-      font-size: 0.9rem;
-    }
-
-    /* Responsive Design */
-    @media (max-width: 768px) {
-      header h1 {
-        font-size: 2rem;
-      }
-
-      header p {
-        font-size: 1rem;
-      }
-
-      .tools-grid {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      }
-    }
+    .category-section.collapsed .tools-grid { display: none; }
   </style>
-  <!-- Google AdSense Script -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_AD_SENSE_ID" crossorigin="anonymous"></script>
 </head>
-<body>
-  <header>
-    <div class="container">
-      <h1>Free Online Tools</h1>
-      <p>Your one-stop solution for image and PDF processing, file conversion, and more.</p>
-    </div>
-  </header>
+<body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-100 transition-colors">
 
-  <main>
-    <div class="container">
-      <!-- Introduction -->
-      <div class="intro">
-        <p>Welcome to Free Online Tools! Explore our collection of free, easy-to-use tools for image and PDF processing, file conversion, QR code generation, and more. Whether you need to compress files, merge PDFs, or generate secure passwords, we’ve got you covered.</p>
-      </div>
+<header class="bg-white dark:bg-gray-800 py-6 shadow-sm flex flex-col items-center">
+  <img src="logo.png" alt="Free Online Tools Logo" class="w-16 h-16 mb-2">
+  <h1 class="text-3xl font-bold">Free Online Tools</h1>
+  <p class="text-gray-600 dark:text-gray-300 max-w-xl text-center text-sm mt-1">
+    Compress, convert, calculate and more — all in one place.
+  </p>
+  
+  
+  
 
-      <!-- AdSense Banner Ad -->
-      <div class="ad-banner">
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_AD_SENSE_ID" crossorigin="anonymous"></script>
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-YOUR_AD_SENSE_ID"
-             data-ad-slot="BANNER_AD_SLOT_ID"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
+</header>
 
-      <!-- Tools Grid -->
-      <div class="tools-grid">
-        <div class="tool-card">
-          <i class="fas fa-file-image"></i>
-          <h2>Image Compression</h2>
-          <p>Compress images without losing quality.</p>
-          <a href="/Tools/img-compress.html" class="btn">Use Tool</a>
-        </div>
-        <div class="tool-card">
-          <i class="fas fa-file-pdf"></i>
-          <h2>PDF Compression</h2>
-          <p>Reduce PDF file size easily.</p>
-          <a href="/Tools/pdf-compress.html" class="btn">Use Tool</a>
-        </div>
-        <div class="tool-card">
-          <i class="fas fa-expand-arrows-alt"></i>
-          <h2>Image Resizer</h2>
-          <p>Resize images to any dimension.</p>
-          <a href="/Tools/img-resize.html" class="btn">Use Tool</a>
-        </div>
-        <div class="tool-card">
-          <i class="fas fa-file-merge"></i>
-          <h2>PDF Merger</h2>
-          <p>Merge multiple PDFs into one.</p>
-          <a href="/Tools/pdf-merge.html" class="btn">Use Tool</a>
-        </div>
-        <div class="tool-card">
-          <i class="fas fa-exchange-alt"></i>
-          <h2>Image Converter</h2>
-          <p>Convert images to different formats.</p>
-          <a href="/Tools/img-converter.html" class="btn">Use Tool</a>
-        </div>
-        <div class="tool-card">
-          <i class="fas fa-cut"></i>
-          <h2>PDF Splitter</h2>
-          <p>Split PDFs into individual pages.</p>
-          <a href="/Tools/pdf-splitter.html" class="btn">Use Tool</a>
-        </div>
-        <div class="tool-card">
-          <i class="fas fa-qrcode"></i>
-          <h2>QR Contact Generator</h2>
-          <p>Create QR codes for URLs, text, and more.</p>
-          <a href="/Tools/qr-generator.html" class="btn">Use Tool</a>
-        </div>
-        <div class="tool-card">
-          <i class="fas fa-wifi"></i>
-          <h2>QR Wi-Fi Generator</h2>
-          <p>Create QR codes for Wi-Fi sharing.</p>
-          <a href="/Tools/qr-wifi.html" class="btn">Use Tool</a>
-        </div>
-        <div class="tool-card">
-          <i class="fas fa-key"></i>
-          <h2>Password Generator</h2>
-          <p>Generate strong and secure passwords.</p>
-          <a href="/Tools/pwd-generator" class="btn">Use Tool</a>
-        </div>
-        <div class="tool-card">
-          <i class="fas fa-calculator"></i>
-          <h2>Advance Calculator</h2>
-          <p>Perform advanced calculations.</p>
-          <a href="/Tools/advance-calculator.html" class="btn">Use Tool</a>
-        </div>
-        <div class="tool-card">
-          <i class="fas fa-book"></i>
-          <h2>Dictionary</h2>
-          <p>Advanced dictionary for word meanings.</p>
-          <a href="/Tools/advance-dictionary.html" class="btn">Use Tool</a>
-        </div>
-        <div class="tool-card">
-          <i class="fas fa-microphone-alt"></i>
-          <h2>Speech-To-Text</h2>
-          <p>Convert speech to text effortlessly.</p>
-          <a href="/Tools/speech-text.html" class="btn">Use Tool</a>
-        </div>
-        <div class="tool-card">
-          <i class="fas fa-volume-up"></i>
-          <h2>Text-To-Speech</h2>
-          <p>Convert text to speech instantly.</p>
-          <a href="/Tools/text-speech.html" class="btn">Use Tool</a>
-        </div>
-        <div class="tool-card">
-          <i class="fas fa-calendar-alt"></i>
-          <h2>Date / Birthday Calculator</h2>
-          <p>Calculate dates and birthdays easily.</p>
-          <a href="/Tools/date-calculator.html" class="btn">Use Tool</a>
-        </div>
-      <div class="tool-card">
-          <i class="fas fa-file-alt"></i>
-          <h2>PDF to Text</h2>
-          <p>Convert PDF files to plain text.</p>
-          <a href="/Tools/pdf-text.html" class="btn">Use Tool</a>
-        </div>
-        <div class="tool-card">
-          <i class="fas fa-table"></i>
-          <h2>PDF to CSV</h2>
-          <p>Convert PDF files to CSV format.</p>
-          <a href="/Tools/pdf-csv.html" class="btn">Use Tool</a>
-        </div>
-          <div class="tool-card">
-          <i class="fas fa-file-excel"></i>
-          <h2>PDF to Excel</h2>
-          <p>Extract tables and convert PDF to Excel.</p>
-          <a href="/Tools/pdf-excel.html" class="btn">Use Tool</a>
-        </div>        
-        <div class="tool-card">
-          <i class="fas fa-code"></i>
-          <h2>PDF to HTML</h2>
-          <p>Convert PDF documents to HTML format.</p>
-          <a href="/Tools/pdf-html.html" class="btn">Use Tool</a>
-        </div>        
-        <div class="tool-card">
-          <i class="fas fa-file-image"></i>
-          <h2>PDF to JPG</h2>
-          <p>Convert PDF pages into JPG images.</p>
-          <a href="/Tools/pdf-jpg.html" class="btn">Use Tool</a>
-        </div>        
-        <div class="tool-card">
-          <i class="fas fa-image"></i>
-          <h2>PDF to PNG</h2>
-          <p>Convert PDF pages into PNG images.</p>
-          <a href="/Tools/pdf-png.html" class="btn">Use Tool</a>
-        </div>        
-        <div class="tool-card">
-          <i class="fas fa-code-branch"></i>
-          <h2>PDF to JSON</h2>
-          <p>Extract and convert PDF content into JSON format.</p>
-          <a href="/Tools/pdf-json.html" class="btn">Use Tool</a>
-        </div>        
-        <div class="tool-card">
-          <i class="fas fa-sitemap"></i>
-          <h2>PDF to XML</h2>
-          <p>Transform PDF data into XML format.</p>
-          <a href="/Tools/pdf-xml.html" class="btn">Use Tool</a>
-        </div>        
-        <div class="tool-card">
-          <i class="fas fa-file-word"></i>
-          <h2>PDF to Word</h2>
-          <p>Convert PDF documents into editable Word files.</p>
-          <a href="/Tools/pdf-word.html" class="btn">Use Tool</a>
-        </div>        
-        <div class="tool-card">
-          <i class="fas fa-file-archive"></i>
-          <h2>PDF to ZIP</h2>
-          <p>Compress and package PDF content into a ZIP file.</p>
-          <a href="/Tools/pdf-zip.html" class="btn">Use Tool</a>
-        </div>        
-        <div class="tool-card">
-          <i class="fas fa-file-archive"></i>
-          <h2>PDF to RAR</h2>
-          <p>Convert and compress PDF into a RAR archive.</p>
-          <a href="/Tools/pdf-rar.html" class="btn">Use Tool</a>
-        </div>        
-        <div class="tool-card">
-          <i class="fas fa-file-image"></i>
-          <h2>PDF to WebP</h2>
-          <p>Convert PDF pages into WebP images.</p>
-          <a href="/Tools/pdf-webp.html" class="btn">Use Tool</a>
-        </div>
-        <div class="tool-card">
-          <i class="fas fa-percent"></i>
-          <h2>Simple Interest Calculator</h2>
-          <p>Calculate interest based on principal, rate, and time.</p>
-          <a href="/Tools/simpleint-calc.html" class="btn">Use Tool</a>
-        </div>        
-        <div class="tool-card">
-          <i class="fas fa-chart-line"></i>
-          <h2>Compound Interest Calculator</h2>
-          <p>Calculate compound interest over time.</p>
-          <a href="/Tools/compoundint-calc.html" class="btn">Use Tool</a>
-        </div>        
-        <div class="tool-card">
-          <i class="fas fa-hand-holding-usd"></i>
-          <h2>Loan Calculator</h2>
-          <p>Estimate monthly loan payments.</p>
-          <a href="/Tools/loan-calc.html" class="btn">Use Tool</a>
-        </div>        
-        <div class="tool-card">
-          <i class="fas fa-piggy-bank"></i>
-          <h2>SIP Calculator</h2>
-          <p>Calculate returns on Systematic Investment Plans.</p>
-          <a href="/Tools/sip-calc.html" class="btn">Use Tool</a>
-        </div>        
-        <div class="tool-card">
-          <i class="fas fa-user-clock"></i>
-          <h2>Retirement Calculator</h2>
-          <p>Plan your retirement savings and goals.</p>
-          <a href="/Tools/retirement-calc.html" class="btn">Use Tool</a>
-        </div>        
-        <div class="tool-card">
-          <i class="fas fa-exchange-alt"></i>
-          <h2>Currency Converter</h2>
-          <p>Convert amounts between different currencies.</p>
-          <a href="/Tools/currency-calc.html" class="btn">Use Tool</a>
-        </div>
-        <div class="tool-card">
-          <i class="fas fa-coins"></i>
-          <h2>Lump Sum Investment Calculator</h2>
-          <p>Calculate returns on one-time investments over time.</p>
-          <a href="/Tools/lumpsuminv-calc.html" class="btn">Use Tool</a>
-        </div>        
-        <div class="tool-card">
-          <i class="fas fa-university"></i>
-          <h2>Fixed Deposit Calculator</h2>
-          <p>Calculate maturity amount and interest on FD.</p>
-          <a href="/Tools/fd-calc.html" class="btn">Use Tool</a>
-        </div>        
-        <div class="tool-card">
-          <i class="fas fa-piggy-bank"></i>
-          <h2>Recurring Deposit Calculator</h2>
-          <p>Estimate returns on regular monthly RD deposits.</p>
-          <a href="/Tools/rd-calc.html" class="btn">Use Tool</a>
-        </div>        
-        <div class="tool-card">
-          <i class="fas fa-file-invoice-dollar"></i>
-          <h2>Income Tax Calculator</h2>
-          <p>Calculate your income tax liability accurately.</p>
-          <a href="/Tools/incometax-calc.html" class="btn">Use Tool</a>
-        </div>
-        <div class="tool-card">
-          <i class="fas fa-chart-line"></i>
-          <h2>SIP Step-Up Calculator</h2>
-          <p>Calculate returns with annual SIP increment.</p>
-          <a href="/Tools/sipstepup-calc.html" class="btn">Use Tool</a>
-        </div>        
-        <div class="tool-card">
-          <i class="fas fa-exchange-alt"></i>
-          <h2>SWP Calculator</h2>
-          <p>Plan Systematic Withdrawal from your investments.</p>
-          <a href="/Tools/swp-calc.html" class="btn">Use Tool</a>
-        </div>        
-        <div class="tool-card">
-          <i class="fas fa-id-card-alt"></i>
-          <h2>NPS Calculator</h2>
-          <p>Estimate returns and pension from NPS investments.</p>
-          <a href="/Tools/nps-calc.html" class="btn">Use Tool</a>
-        </div>        
-        <div class="tool-card">
-          <i class="fas fa-briefcase"></i>
-          <h2>PPF Calculator</h2>
-          <p>Calculate interest and maturity value of PPF.</p>
-          <a href="/Tools/pff-calc.html" class="btn">Use Tool</a>
-        </div>        
-        <div class="tool-card">
-          <i class="fas fa-handshake"></i>
-          <h2>Gratuity Calculator</h2>
-          <p>Calculate gratuity payable under Indian rules.</p>
-          <a href="/Tools/gratuity-calc.html" class="btn">Use Tool</a>
-        </div>        
-        <div class="tool-card">
-          <i class="fas fa-home"></i>
-          <h2>HRA Calculator</h2>
-          <p>Calculate House Rent Allowance (HRA) exemption.</p>
-          <a href="/Tools/hra-calc.html" class="btn">Use Tool</a>
-        </div>        
-        <div class="tool-card">
-          <i class="fas fa-chart-pie"></i>
-          <h2>Inflation Calculator</h2>
-          <p>See how inflation impacts the value of money over time.</p>
-          <a href="/Tools/inflation-calc.html" class="btn">Use Tool</a>
-        </div>        
-        <div class="tool-card">
-          <i class="fas fa-home"></i>
-          <h2>Home Loan Calculator</h2>
-          <p>Calculate EMI and interest for home loans.</p>
-          <a href="/Tools/homeloan-calc.html" class="btn">Use Tool</a>
-        </div>        
-        <div class="tool-card">
-          <i class="fas fa-car"></i>
-          <h2>Car Loan Calculator</h2>
-          <p>Estimate your car loan EMI and interest cost.</p>
-          <a href="/Tools/carloan-calc.html" class="btn">Use Tool</a>
-        </div>
-        <div class="tool-card">
-          <i class="fas fa-coins"></i>
-          <h2>Gold Loan Calculator</h2>
-          <p>Calculate your eligible loan amount on gold assets.</p>
-          <a href="/Tools/goldloan-calc.html" class="btn">Use Tool</a>
-        </div>        
-        <div class="tool-card">
-          <i class="fas fa-balance-scale-left"></i>
-          <h2>Break Even Calculator</h2>
-          <p>Determine break-even points for your business.</p>
-          <a href="/Tools/breakeven-calc.html" class="btn">Use Tool</a>
-        </div>        
-        <div class="tool-card">
-          <i class="fas fa-percentage"></i>
-          <h2>GST Calculator</h2>
-          <p>Calculate GST for inclusive or exclusive prices.</p>
-          <a href="/Tools/gst-calc.html" class="btn">Use Tool</a>
-        </div>        
-        <div class="tool-card">
-          <i class="fas fa-chart-line"></i>
-          <h2>Profit Margin Calculator</h2>
-          <p>Find out gross and net profit margins easily.</p>
-          <a href="/Tools/profitmargin-calc.html" class="btn">Use Tool</a>
-        </div>        
-        <div class="tool-card">
-          <i class="fas fa-chart-pie"></i>
-          <h2>ROI Calculator</h2>
-          <p>Evaluate your return on investment.</p>
-          <a href="/Tools/roi-calc.html" class="btn">Use Tool</a>
-        </div>        
-        <div class="tool-card">
-          <i class="fas fa-landmark"></i>
-          <h2>ROE Calculator</h2>
-          <p>Calculate Return on Equity from net income and equity.</p>
-          <a href="/Tools/roe-calc.html" class="btn">Use Tool</a>
-        </div>        
-        <div class="tool-card">
-          <i class="fas fa-project-diagram"></i>
-          <h2>NPV & IRR Calculator</h2>
-          <p>Analyze Net Present Value and Internal Rate of Return.</p>
-          <a href="/Tools/npvirr-calc.html" class="btn">Use Tool</a>
-        </div>        
-        <div class="tool-card">
-          <i class="fas fa-calendar-check"></i>
-          <h2>Workdays Calculator</h2>
-          <p>Calculate number of workdays between two dates.</p>
-          <a href="/Tools/workdays-calc.html" class="btn">Use Tool</a>
-        </div>        
-        <div class="tool-card">
-          <i class="fas fa-birthday-cake"></i>
-          <h2>Age Calculator</h2>
-          <p>Find out your exact age in years, months, days.</p>
-          <a href="/Tools/age-calc.html" class="btn">Use Tool</a>
-        </div>        
-        <div class="tool-card">
-          <i class="fas fa-hourglass-half"></i>
-          <h2>Countdown Calculator</h2>
-          <p>Start a countdown to your custom event date.</p>
-          <a href="/Tools/countdown-calc.html" class="btn">Use Tool</a>
-        </div>
-        <div class="tool-card">
-          <i class="fas fa-file-archive"></i>
-          <h2>File Converter</h2>
-          <p>Convert files to various formats.</p>
-          <a href="/Tools/file-converter.html" class="btn">Use Tool</a>
-        </div>
+<div class="bg-white dark:bg-gray-800 shadow p-4 mt-6 rounded-lg max-w-5xl mx-auto">
+  <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center">
+    <input type="text" id="searchInput" placeholder="Search for tools..." class="w-full p-2 border border-gray-300 dark:border-gray-700 rounded shadow-sm focus:outline-none" />
+    <select id="sortSelect" onchange="renderTools()" class="mt-2 sm:mt-0 sm:ml-4 p-2 border rounded">
+      <option value="default">Sort by Category</option>
+      <option value="az">Sort A-Z</option>
+    </select>
+  </div>
+</div>
+
+
+<div class="max-w-7xl mx-auto px-4 pt-6">
+  <div class="flex flex-wrap gap-2 justify-center bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+    <button onclick="filterByCategory(null)" class="px-4 py-1 rounded-full bg-gray-900 text-white text-sm">All</button>
+    <button onclick="filterByCategory('image')" class="px-4 py-1 rounded-full bg-blue-100 text-blue-800 text-sm"><i class="fas fa-image mr-1"></i>Image Tools</button>
+    <button onclick="filterByCategory('pdf')" class="px-4 py-1 rounded-full bg-red-100 text-red-800 text-sm"><i class="fas fa-file-pdf mr-1"></i>PDF Tools</button>
+    <button onclick="filterByCategory('converter')" class="px-4 py-1 rounded-full bg-purple-100 text-purple-800 text-sm"><i class="fas fa-exchange-alt mr-1"></i>Converters</button>
+    <button onclick="filterByCategory('generator')" class="px-4 py-1 rounded-full bg-green-100 text-green-800 text-sm"><i class="fas fa-cogs mr-1"></i>Generators</button>
+    <button onclick="filterByCategory('utility')" class="px-4 py-1 rounded-full bg-yellow-100 text-yellow-800 text-sm"><i class="fas fa-tools mr-1"></i>Utilities</button>
+    <button onclick="filterByCategory('calculators')" class="px-4 py-1 rounded-full bg-pink-100 text-pink-800 text-sm"><i class="fas fa-calculator mr-1"></i>Calculators</button>
+  </div>
+</div>
+
+
+<main class="max-w-7xl mx-auto px-4 py-6">
+  
+<div class="flex justify-end mb-4">
+  <label class="inline-flex items-center text-sm">
+    <input type="checkbox" id="collapseToggle" class="mr-2" onchange="renderTools()">
+    Collapsible Categories
+  </label>
+</div>
+
+<div id="toolSections">
         <div class="tool-card">
           <i class="fas fa-search"></i>
-          <h2>PDF Searchable Text</h2>
-          <p>Make scanned PDFs searchable.</p>
-          <a href="/Tools/pdf-searchable.html" class="btn">Use Tool</a>
+          <h2>Advance Word Count</h2>
+          <p>Advance Word Count</p> 
+          <a href="/Tools/word-count.html" class="btn">Use Tool</a> 
         </div>
         <div class="tool-card">
           <i class="fas fa-lock-open"></i>
           <h2>PDF Decrypt</h2>
           <p>Remove password protection from PDFs.</p>
-          <a href="/Tools/pdfdecrypt.html" class="btn">Use Tool</a>
+          <a href="/Tools/pdf-decrypt.html" class="btn">Use Tool</a> 
         </div>
       </div>
+    </main>
 
-      <!-- AdSense Square Ad -->
-      <div class="ad-square">
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_AD_SENSE_ID" crossorigin="anonymous"></script>
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-YOUR_AD_SENSE_ID"
-             data-ad-slot="SQUARE_AD_SLOT_ID"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
+<footer class="text-center py-6 text-gray-400 text-sm dark:text-gray-500">&copy; 2025 Free Online Tools</footer>
+
+<script>
+
+const tools = [
+{
+  "id": "word-count",
+  "icon": "fas fa-search",
+  "title": "Advance Word Count",
+  "description": "Advance Word Count",
+  "link": "/Tools/word-count.html",
+  "category": "utility",
+  "color": "#4a90e2",
+  "tags": [
+    "Utility"
+  ]
+},
+  {
+    "id": "img-compress",
+    "icon": "fas fa-compress",
+    "title": "Image Compression",
+    "description": "Compress images without losing quality.",
+    "link": "/Tools/img-compress.html",
+    "category": "image",
+    "color": "#4a90e2",
+    "tags": [
+      "Image"
+    ]
+  },
+  {
+    "id": "pdf-compress",
+    "icon": "fas fa-file-pdf",
+    "title": "PDF Compression",
+    "description": "Reduce PDF file size easily.",
+    "link": "/Tools/pdf-compress.html",
+    "category": "pdf",
+    "color": "#4a90e2",
+    "tags": [
+      "PDF"
+    ]
+  },
+  {
+    "id": "img-resize",
+    "icon": "fas fa-expand-arrows-alt",
+    "title": "Image Resizer",
+    "description": "Resize images to any dimension.",
+    "link": "/Tools/img-resize.html",
+    "category": "image",
+    "color": "#4a90e2",
+    "tags": [
+      "Image"
+    ]
+  },
+  {
+    "id": "pdf-merge",
+    "icon": "fas fa-file-merge",
+    "title": "PDF Merger",
+    "description": "Merge multiple PDFs into one.",
+    "link": "/Tools/pdf-merge.html",
+    "category": "pdf",
+    "color": "#4a90e2",
+    "tags": [
+      "PDF"
+    ]
+  },
+  {
+    "id": "img-converter",
+    "icon": "fas fa-sync",
+    "title": "Image Converter",
+    "description": "Convert images to different formats.",
+    "link": "/Tools/img-converter.html",
+    "category": "image",
+    "color": "#4a90e2",
+    "tags": [
+      "Image"
+    ]
+  },
+  {
+    "id": "pdf-splitter",
+    "icon": "fas fa-cut",
+    "title": "PDF Splitter",
+    "description": "Split PDFs into individual pages.",
+    "link": "/Tools/pdf-splitter.html",
+    "category": "pdf",
+    "color": "#4a90e2",
+    "tags": [
+      "PDF"
+    ]
+  },
+  {
+    "id": "qr-generator",
+    "icon": "fas fa-qrcode",
+    "title": "QR Contact Generator",
+    "description": "Create QR codes for URLs, text, and more.",
+    "link": "/Tools/qr-generator.html",
+    "category": "generator",
+    "color": "#4a90e2",
+    "tags": [
+      "Generator"
+    ]
+  },
+  {
+    "id": "qr-wifi",
+    "icon": "fas fa-qrcode",
+    "title": "QR Wi-Fi Generator",
+    "description": "Create QR codes for Wi-Fi sharing.",
+    "link": "/Tools/qr-wifi.html",
+    "category": "generator",
+    "color": "#4a90e2",
+    "tags": [
+      "Generator"
+    ]
+  },
+  {
+    "id": "pwd-generator",
+    "icon": "fas fa-file-word",
+    "title": "Password Generator",
+    "description": "Generate strong and secure passwords.",
+    "link": "/Tools/pwd-generator",
+    "category": "generator",
+    "color": "#4a90e2",
+    "tags": [
+      "Generator"
+    ]
+  },
+  {
+    "id": "advance-calculator",
+    "icon": "fas fa-calculator",
+    "title": "Advance Calculator",
+    "description": "Perform advanced calculations.",
+    "link": "/Tools/advance-calculator.html",
+    "category": "calculators",
+    "color": "#4a90e2",
+    "tags": [
+      "Calculators"
+    ]
+  },
+  {
+    "id": "advance-dictionary",
+    "icon": "fas fa-book",
+    "title": "Dictionary",
+    "description": "Advanced dictionary for word meanings.",
+    "link": "/Tools/advance-dictionary.html",
+    "category": "utility",
+    "color": "#4a90e2",
+    "tags": [
+      "Utility"
+    ]
+  },
+  {
+    "id": "speech-text",
+    "icon": "fas fa-microphone-alt",
+    "title": "Speech-To-Text",
+    "description": "Convert speech to text effortlessly.",
+    "link": "/Tools/speech-text.html",
+    "category": "utility",
+    "color": "#4a90e2",
+    "tags": [
+      "Utility"
+    ]
+  },
+  {
+    "id": "text-speech",
+    "icon": "fas fa-volume-up",
+    "title": "Text-To-Speech",
+    "description": "Convert text to speech instantly.",
+    "link": "/Tools/text-speech.html",
+    "category": "utility",
+    "color": "#4a90e2",
+    "tags": [
+      "Utility"
+    ]
+  },
+  {
+    "id": "date-calculator",
+    "icon": "fas fa-calendar-alt",
+    "title": "Date / Birthday Calculator",
+    "description": "Calculate dates and birthdays easily.",
+    "link": "/Tools/date-calculator.html",
+    "category": "calculators",
+    "color": "#4a90e2",
+    "tags": [
+      "Calculators"
+    ]
+  },
+  {
+    "id": "pdf-text",
+    "icon": "fas fa-file-pdf",
+    "title": "PDF to Text",
+    "description": "Convert PDF files to plain text.",
+    "link": "/Tools/pdf-text.html",
+    "category": "pdf",
+    "color": "#4a90e2",
+    "tags": [
+      "PDF"
+    ]
+  },
+  {
+    "id": "pdf-csv",
+    "icon": "fas fa-file-pdf",
+    "title": "PDF to CSV",
+    "description": "Convert PDF files to CSV format.",
+    "link": "/Tools/pdf-csv.html",
+    "category": "pdf",
+    "color": "#4a90e2",
+    "tags": [
+      "PDF"
+    ]
+  },
+  {
+    "id": "pdf-excel",
+    "icon": "fas fa-file-pdf",
+    "title": "PDF to Excel",
+    "description": "Extract tables and convert PDF to Excel.",
+    "link": "/Tools/pdf-excel.html",
+    "category": "pdf",
+    "color": "#4a90e2",
+    "tags": [
+      "PDF"
+    ]
+  },
+  {
+    "id": "pdf-html",
+    "icon": "fas fa-file-pdf",
+    "title": "PDF to HTML",
+    "description": "Convert PDF documents to HTML format.",
+    "link": "/Tools/pdf-html.html",
+    "category": "pdf",
+    "color": "#4a90e2",
+    "tags": [
+      "PDF"
+    ]
+  },
+  {
+    "id": "pdf-jpg",
+    "icon": "fas fa-file-pdf",
+    "title": "PDF to JPG",
+    "description": "Convert PDF pages into JPG images.",
+    "link": "/Tools/pdf-jpg.html",
+    "category": "pdf",
+    "color": "#4a90e2",
+    "tags": [
+      "PDF"
+    ]
+  },
+  {
+    "id": "pdf-png",
+    "icon": "fas fa-file-pdf",
+    "title": "PDF to PNG",
+    "description": "Convert PDF pages into PNG images.",
+    "link": "/Tools/pdf-png.html",
+    "category": "pdf",
+    "color": "#4a90e2",
+    "tags": [
+      "PDF"
+    ]
+  },
+  {
+    "id": "pdf-json",
+    "icon": "fas fa-file-pdf",
+    "title": "PDF to JSON",
+    "description": "Extract and convert PDF content into JSON format.",
+    "link": "/Tools/pdf-json.html",
+    "category": "pdf",
+    "color": "#4a90e2",
+    "tags": [
+      "PDF"
+    ]
+  },
+  {
+    "id": "pdf-xml",
+    "icon": "fas fa-file-pdf",
+    "title": "PDF to XML",
+    "description": "Transform PDF data into XML format.",
+    "link": "/Tools/pdf-xml.html",
+    "category": "pdf",
+    "color": "#4a90e2",
+    "tags": [
+      "PDF"
+    ]
+  },
+  {
+    "id": "pdf-word",
+    "icon": "fas fa-file-pdf",
+    "title": "PDF to Word",
+    "description": "Convert PDF documents into editable Word files.",
+    "link": "/Tools/pdf-word.html",
+    "category": "pdf",
+    "color": "#4a90e2",
+    "tags": [
+      "PDF"
+    ]
+  },
+  {
+    "id": "pdf-zip",
+    "icon": "fas fa-file-pdf",
+    "title": "PDF to ZIP",
+    "description": "Compress and package PDF content into a ZIP file.",
+    "link": "/Tools/pdf-zip.html",
+    "category": "pdf",
+    "color": "#4a90e2",
+    "tags": [
+      "PDF"
+    ]
+  },
+  {
+    "id": "pdf-rar",
+    "icon": "fas fa-file-pdf",
+    "title": "PDF to RAR",
+    "description": "Convert and compress PDF into a RAR archive.",
+    "link": "/Tools/pdf-rar.html",
+    "category": "pdf",
+    "color": "#4a90e2",
+    "tags": [
+      "PDF"
+    ]
+  },
+  {
+    "id": "pdf-webp",
+    "icon": "fas fa-file-pdf",
+    "title": "PDF to WebP",
+    "description": "Convert PDF pages into WebP images.",
+    "link": "/Tools/pdf-webp.html",
+    "category": "pdf",
+    "color": "#4a90e2",
+    "tags": [
+      "PDF"
+    ]
+  },
+  {
+    "id": "simpleint-calc",
+    "icon": "fas fa-percent",
+    "title": "Simple Interest Calculator",
+    "description": "Calculate interest based on principal, rate, and time.",
+    "link": "/Tools/simpleint-calc.html",
+    "category": "calculators",
+    "color": "#4a90e2",
+    "tags": [
+      "Calculators"
+    ]
+  },
+  {
+    "id": "compoundint-calc",
+    "icon": "fas fa-chart-line",
+    "title": "Compound Interest Calculator",
+    "description": "Calculate compound interest over time.",
+    "link": "/Tools/compoundint-calc.html",
+    "category": "calculators",
+    "color": "#4a90e2",
+    "tags": [
+      "Calculators"
+    ]
+  },
+  {
+    "id": "loan-calc",
+    "icon": "fas fa-hand-holding-usd",
+    "title": "Loan Calculator",
+    "description": "Estimate monthly loan payments.",
+    "link": "/Tools/loan-calc.html",
+    "category": "calculators",
+    "color": "#4a90e2",
+    "tags": [
+      "Calculators"
+    ]
+  },
+  {
+    "id": "sip-calc",
+    "icon": "fas fa-piggy-bank",
+    "title": "SIP Calculator",
+    "description": "Calculate returns on Systematic Investment Plans.",
+    "link": "/Tools/sip-calc.html",
+    "category": "calculators",
+    "color": "#4a90e2",
+    "tags": [
+      "Calculators"
+    ]
+  },
+  {
+    "id": "retirement-calc",
+    "icon": "fas fa-user-clock",
+    "title": "Retirement Calculator",
+    "description": "Plan your retirement savings and goals.",
+    "link": "/Tools/retirement-calc.html",
+    "category": "calculators",
+    "color": "#4a90e2",
+    "tags": [
+      "Calculators"
+    ]
+  },
+  {
+    "id": "currency-calc",
+    "icon": "fas fa-money-bill-wave",
+    "title": "Currency Converter",
+    "description": "Convert amounts between different currencies.",
+    "link": "/Tools/currency-calc.html",
+    "category": "utility",
+    "color": "#4a90e2",
+    "tags": [
+      "Utility"
+    ]
+  },
+  {
+    "id": "lumpsuminv-calc",
+    "icon": "fas fa-coins",
+    "title": "Lump Sum Investment Calculator",
+    "description": "Calculate returns on one-time investments over time.",
+    "link": "/Tools/lumpsuminv-calc.html",
+    "category": "calculators",
+    "color": "#4a90e2",
+    "tags": [
+      "Calculators"
+    ]
+  },
+  {
+    "id": "fd-calc",
+    "icon": "fas fa-university",
+    "title": "Fixed Deposit Calculator",
+    "description": "Calculate maturity amount and interest on FD.",
+    "link": "/Tools/fd-calc.html",
+    "category": "calculators",
+    "color": "#4a90e2",
+    "tags": [
+      "Calculators"
+    ]
+  },
+  {
+    "id": "rd-calc",
+    "icon": "fas fa-piggy-bank",
+    "title": "Recurring Deposit Calculator",
+    "description": "Estimate returns on regular monthly RD deposits.",
+    "link": "/Tools/rd-calc.html",
+    "category": "calculators",
+    "color": "#4a90e2",
+    "tags": [
+      "Calculators"
+    ]
+  },
+  {
+    "id": "incometax-calc",
+    "icon": "fas fa-file-invoice-dollar",
+    "title": "Income Tax Calculator",
+    "description": "Calculate your income tax liability accurately.",
+    "link": "/Tools/incometax-calc.html",
+    "category": "calculators",
+    "color": "#4a90e2",
+    "tags": [
+      "Calculators"
+    ]
+  },
+  {
+    "id": "sipstepup-calc",
+    "icon": "fas fa-arrow-up",
+    "title": "SIP Step-Up Calculator",
+    "description": "Calculate returns with annual SIP increment.",
+    "link": "/Tools/sipstepup-calc.html",
+    "category": "calculators",
+    "color": "#4a90e2",
+    "tags": [
+      "Calculators"
+    ]
+  },
+  {
+    "id": "swp-calc",
+    "icon": "fas fa-arrow-down",
+    "title": "SWP Calculator",
+    "description": "Plan Systematic Withdrawal from your investments.",
+    "link": "/Tools/swp-calc.html",
+    "category": "calculators",
+    "color": "#4a90e2",
+    "tags": [
+      "Calculators"
+    ]
+  },
+  {
+    "id": "nps-calc",
+    "icon": "fas fa-id-badge",
+    "title": "NPS Calculator",
+    "description": "Estimate returns and pension from NPS investments.",
+    "link": "/Tools/nps-calc.html",
+    "category": "calculators",
+    "color": "#4a90e2",
+    "tags": [
+      "Calculators"
+    ]
+  },
+  {
+    "id": "pff-calc",
+    "icon": "fas fa-briefcase",
+    "title": "PPF Calculator",
+    "description": "Calculate interest and maturity value of PPF.",
+    "link": "/Tools/pff-calc.html",
+    "category": "calculators",
+    "color": "#4a90e2",
+    "tags": [
+      "Calculators"
+    ]
+  },
+  {
+    "id": "gratuity-calc",
+    "icon": "fas fa-handshake",
+    "title": "Gratuity Calculator",
+    "description": "Calculate gratuity payable under Indian rules.",
+    "link": "/Tools/gratuity-calc.html",
+    "category": "calculators",
+    "color": "#4a90e2",
+    "tags": [
+      "Calculators"
+    ]
+  },
+  {
+    "id": "hra-calc",
+    "icon": "fas fa-home",
+    "title": "HRA Calculator",
+    "description": "Calculate House Rent Allowance (HRA) exemption.",
+    "link": "/Tools/hra-calc.html",
+    "category": "calculators",
+    "color": "#4a90e2",
+    "tags": [
+      "Calculators"
+    ]
+  },
+  {
+    "id": "inflation-calc",
+    "icon": "fas fa-chart-pie",
+    "title": "Inflation Calculator",
+    "description": "See how inflation impacts the value of money over time.",
+    "link": "/Tools/inflation-calc.html",
+    "category": "calculators",
+    "color": "#4a90e2",
+    "tags": [
+      "Calculators"
+    ]
+  },
+  {
+    "id": "homeloan-calc",
+    "icon": "fas fa-home",
+    "title": "Home Loan Calculator",
+    "description": "Calculate EMI and interest for home loans.",
+    "link": "/Tools/homeloan-calc.html",
+    "category": "calculators",
+    "color": "#4a90e2",
+    "tags": [
+      "Calculators"
+    ]
+  },
+  {
+    "id": "carloan-calc",
+    "icon": "fas fa-car",
+    "title": "Car Loan Calculator",
+    "description": "Estimate your car loan EMI and interest cost.",
+    "link": "/Tools/carloan-calc.html",
+    "category": "calculators",
+    "color": "#4a90e2",
+    "tags": [
+      "Calculators"
+    ]
+  },
+  {
+    "id": "file-converter",
+    "icon": "fas fa-random",
+    "title": "File Converter",
+    "description": "Convert files to various formats.",
+    "link": "/Tools/file-converter.html",
+    "category": "converter",
+    "color": "#4a90e2",
+    "tags": [
+      "Converter"
+    ]
+  },
+  {
+    "id": "pdf-searchable",
+    "icon": "fas fa-file-pdf",
+    "title": "PDF Searchable Text",
+    "description": "Make scanned PDFs searchable.",
+    "link": "/Tools/pdf-searchable.html",
+    "category": "pdf",
+    "color": "#4a90e2",
+    "tags": [
+      "PDF"
+    ]
+  },
+  {
+    "id": "pdfdecrypt",
+    "icon": "fas fa-file-pdf",
+    "title": "PDF Decrypt",
+    "description": "Remove password protection from PDFs.",
+    "link": "/Tools/pdfdecrypt.html",
+    "category": "pdf",
+    "color": "#4a90e2",
+    "tags": [
+      "PDF"
+    ]
+  },
+  {
+    "id": "goldloan-calc",
+    "icon": "fas fa-coins",
+    "title": "Gold Loan Calculator",
+    "description": "Calculate your eligible loan amount on gold assets.",
+    "link": "/Tools/goldloan-calc.html",
+    "category": "calculators",
+    "color": "#4a90e2",
+    "tags": [
+      "Calculators"
+    ]
+  },
+  {
+    "id": "breakeven-calc",
+    "icon": "fas fa-balance-scale-left",
+    "title": "Break Even Calculator",
+    "description": "Determine break-even points for your business.",
+    "link": "/Tools/breakeven-calc.html",
+    "category": "calculators",
+    "color": "#4a90e2",
+    "tags": [
+      "Calculators"
+    ]
+  },
+  {
+    "id": "gst-calc",
+    "icon": "fas fa-percentage",
+    "title": "GST Calculator",
+    "description": "Calculate GST for inclusive or exclusive prices.",
+    "link": "/Tools/gst-calc.html",
+    "category": "calculators",
+    "color": "#4a90e2",
+    "tags": [
+      "Calculators"
+    ]
+  },
+  {
+    "id": "profitmargin-calc",
+    "icon": "fas fa-chart-line",
+    "title": "Profit Margin Calculator",
+    "description": "Find out gross and net profit margins easily.",
+    "link": "/Tools/profitmargin-calc.html",
+    "category": "calculators",
+    "color": "#4a90e2",
+    "tags": [
+      "Calculators"
+    ]
+  },
+  {
+    "id": "roi-calc",
+    "icon": "fas fa-chart-pie",
+    "title": "ROI Calculator",
+    "description": "Evaluate your return on investment.",
+    "link": "/Tools/roi-calc.html",
+    "category": "calculators",
+    "color": "#4a90e2",
+    "tags": [
+      "Calculators"
+    ]
+  },
+  {
+    "id": "roe-calc",
+    "icon": "fas fa-landmark",
+    "title": "ROE Calculator",
+    "description": "Calculate Return on Equity from net income and equity.",
+    "link": "/Tools/roe-calc.html",
+    "category": "calculators",
+    "color": "#4a90e2",
+    "tags": [
+      "Calculators"
+    ]
+  },
+  {
+    "id": "npvirr-calc",
+    "icon": "fas fa-project-diagram",
+    "title": "NPV & IRR Calculator",
+    "description": "Analyze Net Present Value and Internal Rate of Return.",
+    "link": "/Tools/npvirr-calc.html",
+    "category": "calculators",
+    "color": "#4a90e2",
+    "tags": [
+      "Calculators"
+    ]
+  },
+  {
+    "id": "workdays-calc",
+    "icon": "fas fa-calendar-check",
+    "title": "Workdays Calculator",
+    "description": "Calculate number of workdays between two dates.",
+    "link": "/Tools/workdays-calc.html",
+    "category": "calculators",
+    "color": "#4a90e2",
+    "tags": [
+      "Calculators"
+    ]
+  },
+  {
+    "id": "age-calc",
+    "icon": "fas fa-birthday-cake",
+    "title": "Age Calculator",
+    "description": "Find out your exact age in years, months, days.",
+    "link": "/Tools/age-calc.html",
+    "category": "calculators",
+    "color": "#4a90e2",
+    "tags": [
+      "Calculators"
+    ]
+  },
+  {
+    "id": "countdown-calc",
+    "icon": "fas fa-hourglass-half",
+    "title": "Countdown Calculator",
+    "description": "Start a countdown to your custom event date.",
+    "link": "/Tools/countdown-calc.html",
+    "category": "utility",
+    "color": "#4a90e2",
+    "tags": [
+      "Utility"
+    ]
+  }
+];
+
+const categoryTitles = {
+  pdf: "PDF Tools",
+  converter: "Converters",
+  generator: "Generators",
+  utility: "Utilities",
+  image: "Image Tools",
+  calculators: "Calculators"
+};
+
+const categoryColors = {
+  pdf: "red",
+  converter: "purple",
+  generator: "green",
+  utility: "yellow",
+  image: "blue",
+  calculators: "pink"
+};
+
+let activeCategory = null;
+
+function renderTools() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const sort = document.getElementById('sortSelect').value;
+  const section = document.getElementById('toolSections');
+  section.innerHTML = "";
+
+  let filtered = tools.filter(tool => {
+    if (activeCategory && tool.category !== activeCategory) return false;
+    return tool.title.toLowerCase().includes(search) || tool.description.toLowerCase().includes(search);
+  });
+
+  if (sort === "az") {
+    filtered.sort((a, b) => a.title.localeCompare(b.title));
+  }
+
+  const grouped = {};
+  filtered.forEach(tool => {
+    if (!grouped[tool.category]) grouped[tool.category] = [];
+    grouped[tool.category].push(tool);
+  });
+
+  Object.keys(grouped).forEach(cat => {
+    const group = grouped[cat];
+    const color = categoryColors[cat] || 'blue';
+    const title = categoryTitles[cat] || cat;
+
+    const toolsHtml = group.map(tool => `
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-4 flex flex-col items-center text-center">
+        <div class="w-12 h-12 rounded-full flex items-center justify-center mb-3 bg-${color}-100 text-${color}-600 text-xl">
+          <i class="${tool.icon || 'fas fa-toolbox'}"></i>
+        </div>
+        <h3 class="text-base font-semibold mb-1">${tool.title}</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-300 mb-3 line-clamp-2">${tool.description}</p>
+        <a href="${tool.link}" class="text-white bg-${color}-500 text-xs px-3 py-1 rounded-full hover:opacity-90 transition">Use Tool</a>
       </div>
-    </div>
-  </main>
+    `).join("");
 
-  <footer>
-    <div class="container">
-      <p>&copy; 2023 Free Online Tools. All rights reserved.</p>
+    section.innerHTML += `
+      <section class="mb-6 category-section ${document.getElementById('collapseToggle')?.checked ? 'collapsed' : ''}">
+        <h2 onclick="this.parentElement.classList.toggle('collapsed')" class="cursor-pointer text-xl font-bold mb-4 flex items-center justify-between text-${color}-600">
+          <span><i class="fas fa-folder"></i> ${title}</span>
+          <i class="fas fa-chevron-down"></i>
+        </h2>
+        <div class="tools-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          ${toolsHtml}
+        </div>
+      </section>
+    `;
+  });
+}
+
+function filterByCategory(cat) {
+  activeCategory = cat;
+  renderTools();
+}
+
+document.getElementById('searchInput').addEventListener('input', renderTools);
+
+window.onload = () => {
+  const prefersDark = localStorage.getItem('theme') === 'dark';
+  if (prefersDark) {
+    document.documentElement.classList.add('dark');
+    
+  }
+  renderTools();
+};
+
+
+</script>
+
+
+<section class="bg-gray-50 dark:bg-gray-900 py-12 px-4">
+  <div class="max-w-7xl mx-auto text-center mb-10">
+    <h2 class="text-3xl font-bold mb-2">Why Choose Our Tools?</h2>
+    <p class="text-gray-600 dark:text-gray-300 text-base">Our tools are designed to be simple, efficient, and completely free for everyone to use.</p>
+  </div>
+  <div class="max-w-6xl mx-auto grid gap-6 sm:grid-cols-2 md:grid-cols-3">
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow text-center">
+      <div class="text-blue-500 text-3xl mb-3"><i class="fas fa-bolt"></i></div>
+      <h3 class="font-semibold text-lg mb-1">Fast Processing</h3>
+      <p class="text-gray-600 dark:text-gray-400 text-sm">Get your results quickly with our optimized processing algorithms.</p>
     </div>
-  </footer>
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow text-center">
+      <div class="text-green-500 text-3xl mb-3"><i class="fas fa-lock"></i></div>
+      <h3 class="font-semibold text-lg mb-1">Secure & Private</h3>
+      <p class="text-gray-600 dark:text-gray-400 text-sm">Your files are processed securely and never stored on our servers.</p>
+    </div>
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow text-center">
+      <div class="text-yellow-500 text-3xl mb-3"><i class="fas fa-laptop"></i></div>
+      <h3 class="font-semibold text-lg mb-1">Works Everywhere</h3>
+      <p class="text-gray-600 dark:text-gray-400 text-sm">Use our tools on any device with a web browser. No installation required.</p>
+    </div>
+  </div>
+</section>
+
 </body>
 </html>
