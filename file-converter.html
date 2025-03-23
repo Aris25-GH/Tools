@@ -12,6 +12,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.28.1/docxtemplater.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -91,6 +92,7 @@
         <option value="pdfToXML">PDF to XML</option>
         <option value="pdfToWord">PDF to Word</option>
         <option value="pdfToZIP">PDF to ZIP</option>
+        <option value="pdfToRAR">PDF to RAR</option>
         <option value="pdfToWebP">PDF to WebP</option>
       </select>
     </div>
@@ -111,6 +113,7 @@
       pdfToXML: "PDF to XML",
       pdfToWord: "PDF to Word",
       pdfToZIP: "PDF to ZIP",
+      pdfToRAR: "PDF to RAR",
       pdfToWebP: "PDF to WebP"
     };
 
@@ -171,6 +174,9 @@
             break;
           case 'pdfToZIP':
             result = await pdfToZIP(file, progress);
+            break;
+          case 'pdfToRAR':
+            result = await pdfToRAR(file, progress);
             break;
           default:
             throw new Error('Unsupported conversion type.');
@@ -235,20 +241,24 @@
 
     // PDF to Image (JPG, PNG, WebP)
     async function pdfToImage(file, format, progressElement) {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const img = new Image();
-        img.src = e.target.result;
-        img.onload = function () {
-          doc.addImage(img, format.toUpperCase(), 10, 10, 180, 180);
-          doc.save(`output.${format}`);
-          updateProgress(progressElement, 100);
-        };
-      };
-      reader.readAsDataURL(file);
-      return `Image (${format}) generated. Check your downloads.`;
+      const typedArray = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument(typedArray).promise;
+      const zip = new JSZip();
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const viewport = page.getViewport({ scale: 1.5 });
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+        await page.render({ canvasContext: context, viewport: viewport }).promise;
+        const image = canvas.toDataURL(`image/${format}`);
+        zip.file(`page_${i}.${format}`, image.split(',')[1], { base64: true });
+        updateProgress(progressElement, Math.round((i / pdf.numPages) * 100));
+      }
+      const content = await zip.generateAsync({ type: 'blob' });
+      saveAs(content, `output.zip`);
+      return `Images (${format}) generated. Check your downloads.`;
     }
 
     // PDF to JSON
@@ -272,20 +282,64 @@
     // PDF to Word
     async function pdfToWord(file, progressElement) {
       const text = await pdfToText(file, progressElement);
-      const htmlContent = `<html><body><pre>${text}</pre></body></html>`;
-      const blob = new Blob([htmlContent], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document;charset=utf-8;' });
-      saveAs(blob, 'output.docx');
-      return 'Word file generated. Check your downloads.';
+
+      // Load a blank Word template (you can create a simple template or use an empty one)
+      const template = `
+          <w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+              <w:body>
+                  <w:p>
+                      <w:r>
+                          <w:t>${text}</w:t>
+                      </w:r>
+                  </w:p>
+              </w:body>
+          </w:document>
+      `;
+
+      // Create a new DOCX file using docxtemplater
+      const zip = new JSZip();
+      zip.file("word/document.xml", template);
+      zip.file("[Content_Types].xml", `
+          <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+          <Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
+              <Default Extension="xml" ContentType="application/xml"/>
+              <Default Extension="docx" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document"/>
+          </Types>
+      `);
+      zip.file("_rels/.rels", `
+          <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+          <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+              <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>
+          </Relationships>
+      `);
+
+      // Generate the DOCX file
+      const content = await zip.generateAsync({ type: "blob" });
+      saveAs(content, "output.docx");
+
+      return "Word file generated. Check your downloads.";
     }
 
     // PDF to ZIP
     async function pdfToZIP(file, progressElement) {
-      const text = await pdfToText(file, progressElement);
       const zip = new JSZip();
-      zip.file('output.txt', text);
-      const content = await zip.generateAsync({ type: 'blob' });
-      saveAs(content, 'output.zip');
-      return 'ZIP file generated. Check your downloads.';
+      zip.file(file.name, file); // Add the original PDF file to the ZIP
+      updateProgress(progressElement, 50); // Update progress
+      const content = await zip.generateAsync({ type: "blob" });
+      saveAs(content, "output.zip");
+      updateProgress(progressElement, 100); // Update progress
+      return "ZIP file generated. Check your downloads.";
+    }
+
+    // PDF to RAR
+    async function pdfToRAR(file, progressElement) {
+      const zip = new JSZip();
+      zip.file(file.name, file); // Add the original PDF file to the ZIP
+      updateProgress(progressElement, 50); // Update progress
+      const content = await zip.generateAsync({ type: "blob" });
+      saveAs(content, "output.rar"); // Save as .rar (not a true RAR file)
+      updateProgress(progressElement, 100); // Update progress
+      return "RAR file generated. Check your downloads.";
     }
   </script>
 </body>
