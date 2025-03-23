@@ -2,108 +2,159 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <title>PDF to Excel - Visual & OCR Mode</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Convert PDF files to Excel online. Fast, secure, and easy-to-use PDF to Excel converter." />
-  <meta name="keywords" content="PDF to Excel, PDF Converter, Online PDF Tools" />
-  <meta name="author" content="Your Company Name" />
-  <title>PDF to Excel - Online PDF Converter</title>
-  <link rel="canonical" href="https://www.yourwebsite.com/pdf-to-excel" />
   <style>
-    /* Same CSS as above */
+    body { font-family: Arial, sans-serif; max-width: 800px; margin: auto; padding: 20px; }
+    h1 { color: #2c3e50; }
+    label { display: block; margin-top: 10px; }
+    .progress { margin-top: 10px; color: green; }
+    textarea { width: 100%; height: 150px; margin-top: 10px; display: none; }
+    button { padding: 10px 20px; margin-top: 10px; }
+    select, input[type="checkbox"] { margin-top: 5px; }
+    .desc { background: #f9f9f9; padding: 10px; border-left: 4px solid #3498db; margin-bottom: 20px; }
   </style>
 </head>
 <body>
-  <!-- Header Ad -->
-  <div class="ad">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_AD_SENSE_ID" crossorigin="anonymous"></script>
-    <!-- Ad Unit 1 -->
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-YOUR_AD_SENSE_ID"
-         data-ad-slot="AD_UNIT_ID_1"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>
-         (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
+  <h1>PDF to Excel Converter</h1>
+
+  <div class="desc">
+    <strong>How it works:</strong>
+    <ul>
+      <li><strong>Visual Match (Image)</strong>: Converts PDF pages to images, saved inside a ZIP with Excel file referencing them.</li>
+      <li><strong>Text + OCR</strong>: Extracts editable text into Excel sheets. Use OCR for scanned PDFs.</li>
+    </ul>
   </div>
 
-  <header>
-    <h1>PDF to Excel Converter</h1>
-    <p>Convert PDF files to Excel quickly and easily.</p>
-  </header>
+  <div class="tool">
+    <input type="file" id="input_pdf" accept=".pdf" />
 
-  <div class="container">
-    <h2>Upload Your PDF File</h2>
-    <div class="tool">
-      <input type="file" id="input_pdfToExcel" accept=".pdf" />
-      <button onclick="handleConversion()">Convert to Excel</button>
-      <div class="progress" id="progress_pdfToExcel"></div>
-      <textarea id="output_pdfToExcel" readonly></textarea>
-    </div>
+    <label>
+      Conversion Mode:
+      <select id="mode">
+        <option value="image">🖼️ Visual Match (Image)</option>
+        <option value="text">📝 Text + OCR</option>
+      </select>
+    </label>
+
+    <label id="ocr_toggle" style="display:none;">
+      <input type="checkbox" id="use_ocr" />
+      Enable OCR (for scanned PDFs)
+    </label>
+
+    <button onclick="handleConversion()">Convert</button>
+    <div class="progress" id="progress"></div>
+    <textarea id="output_text" readonly placeholder="Text output will appear here (for OCR mode)..."></textarea>
   </div>
 
-  <!-- Footer Ad -->
-  <div class="ad">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_AD_SENSE_ID" crossorigin="anonymous"></script>
-    <!-- Ad Unit 2 -->
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-YOUR_AD_SENSE_ID"
-         data-ad-slot="AD_UNIT_ID_2"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>
-         (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
-  </div>
-
-  <footer>
-    <p>&copy; 2023 Your Company Name. All rights reserved.</p>
-  </footer>
-
+  <!-- Libraries -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.0.3/dist/tesseract.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.0/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+  <!-- Logic -->
   <script>
+    document.getElementById('mode').addEventListener('change', function () {
+      const mode = this.value;
+      const show = mode === 'text';
+      document.getElementById('ocr_toggle').style.display = show ? 'block' : 'none';
+      document.getElementById('output_text').style.display = show ? 'block' : 'none';
+    });
+
     async function handleConversion() {
-      const input = document.getElementById('input_pdfToExcel');
-      const progress = document.getElementById('progress_pdfToExcel');
-      const output = document.getElementById('output_pdfToExcel');
+      const input = document.getElementById('input_pdf');
       const file = input.files[0];
+      const mode = document.getElementById('mode').value;
+      const useOCR = document.getElementById('use_ocr').checked;
+      const progress = document.getElementById('progress');
+      const output = document.getElementById('output_text');
+
       if (!file) return alert('Please select a PDF file.');
+      output.value = '';
+      progress.textContent = 'Loading PDF...';
 
-      progress.textContent = 'Processing: 0%';
-      try {
-        const text = await pdfToText(file, progress);
-        const rows = text.split('\n');
-        const data = rows.map(row => row.split(' '));
-        const ws = XLSX.utils.aoa_to_sheet(data);
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-        XLSX.writeFile(wb, 'output.xlsx');
-        progress.textContent = 'Done!';
-        output.value = 'Excel file generated. Check your downloads.';
-      } catch (error) {
-        progress.textContent = 'Error!';
-        output.value = `Error: ${error.message}`;
-      }
-    }
-
-    function updateProgress(progressElement, percentage) {
-      progressElement.textContent = `Processing: ${percentage}%`;
-    }
-
-    async function pdfToText(file, progressElement) {
       const typedArray = await file.arrayBuffer();
-      const pdf = await pdfjsLib.getDocument(typedArray).promise;
-      let text = '';
-      for (let i = 1; i <= pdf.numPages; i++) {
-        const page = await pdf.getPage(i);
-        const content = await page.getTextContent();
-        text += content.items.map(item => item.str).join(' ');
-        updateProgress(progressElement, Math.round((i / pdf.numPages) * 100));
+      const pdf = await pdfjsLib.getDocument({ data: typedArray }).promise;
+      const wb = XLSX.utils.book_new();
+
+      if (mode === 'image') {
+        const zip = new JSZip();
+        const imageFolder = zip.folder("images");
+
+        for (let i = 1; i <= pdf.numPages; i++) {
+          progress.textContent = `Rendering page ${i} of ${pdf.numPages}...`;
+          const page = await pdf.getPage(i);
+          const viewport = page.getViewport({ scale: 2 });
+
+          const canvas = document.createElement('canvas');
+          const context = canvas.getContext('2d');
+          canvas.width = viewport.width;
+          canvas.height = viewport.height;
+
+          await page.render({ canvasContext: context, viewport }).promise;
+
+          const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+          const arrayBuffer = await blob.arrayBuffer();
+          const imageName = `page-${i}.png`;
+          imageFolder.file(imageName, arrayBuffer);
+
+          const sheetData = [
+            [`Page ${i}`, 'Image Filename'],
+            ['', imageName],
+            ['', 'Open image from ZIP file to view']
+          ];
+          const ws = XLSX.utils.aoa_to_sheet(sheetData);
+          XLSX.utils.book_append_sheet(wb, ws, `Page ${i}`);
+        }
+
+        progress.textContent = 'Packaging ZIP...';
+        const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+        zip.file("converted.xlsx", wbout);
+        const zipBlob = await zip.generateAsync({ type: "blob" });
+        saveAs(zipBlob, "pdf-to-excel-images.zip");
+        progress.textContent = 'Done! ZIP file downloaded.';
       }
-      return text;
+
+      if (mode === 'text') {
+        for (let i = 1; i <= pdf.numPages; i++) {
+          progress.textContent = `Processing page ${i} of ${pdf.numPages}...`;
+          const page = await pdf.getPage(i);
+          const viewport = page.getViewport({ scale: 2 });
+
+          const canvas = document.createElement('canvas');
+          canvas.width = viewport.width;
+          canvas.height = viewport.height;
+          const context = canvas.getContext('2d');
+          await page.render({ canvasContext: context, viewport }).promise;
+
+          const imgData = canvas.toDataURL('image/png');
+
+          let text = '';
+          if (useOCR) {
+            progress.textContent = `Running OCR on page ${i}...`;
+            const { data: ocr } = await Tesseract.recognize(imgData, 'eng', {
+              logger: m => progress.textContent = `OCR Page ${i}: ${m.status} (${Math.round(m.progress * 100)}%)`
+            });
+            text = ocr.text;
+          } else {
+            const content = await page.getTextContent();
+            text = content.items.map(item => item.str).join(' ');
+          }
+
+          output.value += `\n\nPage ${i}:\n${text}`;
+          const lines = text.split('\n').map(line => [line]);
+          const ws = XLSX.utils.aoa_to_sheet(lines);
+          XLSX.utils.book_append_sheet(wb, ws, `Page ${i}`);
+        }
+
+        progress.textContent = 'Generating Excel file...';
+        const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+        const blob = new Blob([wbout], { type: "application/octet-stream" });
+        saveAs(blob, "converted-text.xlsx");
+        progress.textContent = 'Done! Excel file downloaded.';
+      }
     }
   </script>
 </body>
