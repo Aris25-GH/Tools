@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIP with Step-Up Calculator</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f9;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .calculator-container {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+    h1 {
+      text-align: center;
+      color: #4a90e2;
+      margin-bottom: 1.5rem;
+    }
+    .input-group {
+      margin-bottom: 1rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      background-color: #4a90e2;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #357abd;
+    }
+    .result-container {
+      margin-top: 2rem;
+      padding: 1rem;
+      background-color: #f9f9f9;
+      border-radius: 5px;
+    }
+    .result-container h2 {
+      margin-bottom: 1rem;
+      color: #333;
+    }
+    .result-container p {
+      margin: 0.5rem 0;
+      font-size: 1rem;
+    }
+    .result-container span {
+      font-weight: bold;
+      color: #4a90e2;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator-container">
+    <h1>SIP with Step-Up Calculator</h1>
+    <form id="sip-step-up-form">
+      <div class="input-group">
+        <label for="initial-investment">Initial Monthly Investment (₹):</label>
+        <input type="number" id="initial-investment" required>
+      </div>
+      <div class="input-group">
+        <label for="step-up-percentage">Step-Up Percentage (%):</label>
+        <input type="number" id="step-up-percentage" step="0.1" required>
+      </div>
+      <div class="input-group">
+        <label for="expected-return">Expected Annual Return (%):</label>
+        <input type="number" id="expected-return" step="0.1" required>
+      </div>
+      <div class="input-group">
+        <label for="investment-tenure">Investment Tenure (Years):</label>
+        <input type="number" id="investment-tenure" required>
+      </div>
+      <button type="submit">Calculate</button>
+    </form>
+    <div id="result" class="result-container">
+      <h2>Results</h2>
+      <p><strong>Total Investment:</strong> <span id="total-investment">₹0.00</span></p>
+      <p><strong>Estimated Returns:</strong> <span id="estimated-returns">₹0.00</span></p>
+      <p><strong>Total Value:</strong> <span id="total-value">₹0.00</span></p>
+    </div>
+  </div>
+  <script>
+    document.getElementById('sip-step-up-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const initialInvestment = parseFloat(document.getElementById('initial-investment').value);
+      const stepUpPercentage = parseFloat(document.getElementById('step-up-percentage').value);
+      const expectedReturn = parseFloat(document.getElementById('expected-return').value);
+      const investmentTenure = parseFloat(document.getElementById('investment-tenure').value);
+
+      let totalInvestment = 0;
+      let futureValue = 0;
+      const monthlyRate = expectedReturn / 12 / 100;
+      const numberOfMonths = investmentTenure * 12;
+
+      for (let i = 1; i <= numberOfMonths; i++) {
+        const monthlyInvestment = initialInvestment * Math.pow(1 + stepUpPercentage / 100, Math.floor((i - 1) / 12));
+        totalInvestment += monthlyInvestment;
+        futureValue += monthlyInvestment * Math.pow(1 + monthlyRate, numberOfMonths - i + 1);
+      }
+
+      const estimatedReturns = futureValue - totalInvestment;
+
+      document.getElementById('total-investment').textContent = `₹${totalInvestment.toFixed(2)}`;
+      document.getElementById('estimated-returns').textContent = `₹${estimatedReturns.toFixed(2)}`;
+      document.getElementById('total-value').textContent = `₹${futureValue.toFixed(2)}`;
+    });
+  </script>
+</body>
+</html>
