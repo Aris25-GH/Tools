@@ -116,4 +116,15 @@
       const futureValue =
         monthlyInvestment *
         ((Math.pow(1 + monthlyRate, numberOfMonths) - 1) / monthlyRate) *
-       
+        (1 + monthlyRate);
+
+      const totalInvestment = monthlyInvestment * numberOfMonths;
+      const estimatedReturns = futureValue - totalInvestment;
+
+      document.getElementById('total-investment').textContent = `₹${totalInvestment.toFixed(2)}`;
+      document.getElementById('estimated-returns').textContent = `₹${estimatedReturns.toFixed(2)}`;
+      document.getElementById('total-value').textContent = `₹${futureValue.toFixed(2)}`;
+    });
+  </script>
+</body>
+</html>
