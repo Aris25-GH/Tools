@@ -59,4 +59,49 @@
   </div>
 
   <footer>
-    <p>&copy; 2023 Your Company Name. All
+    <p>&copy; 2023 Your Company Name. All rights reserved.</p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <script>
+    async function handleConversion() {
+      const input = document.getElementById('input_pdfToJSON');
+      const progress = document.getElementById('progress_pdfToJSON');
+      const output = document.getElementById('output_pdfToJSON');
+      const file = input.files[0];
+      if (!file) return alert('Please select a PDF file.');
+
+      progress.textContent = 'Processing: 0%';
+      try {
+        const text = await pdfToText(file, progress);
+        const jsonContent = JSON.stringify({ text }, null, 2);
+        const blob = new Blob([jsonContent], { type: 'application/json;charset=utf-8;' });
+        saveAs(blob, 'output.json');
+        progress.textContent = 'Done!';
+        output.value = 'JSON file generated. Check your downloads.';
+      } catch (error) {
+        progress.textContent = 'Error!';
+        output.value = `Error: ${error.message}`;
+      }
+    }
+
+    function updateProgress(progressElement, percentage) {
+      progressElement.textContent = `Processing: ${percentage}%`;
+    }
+
+    async function pdfToText(file, progressElement) {
+      const typedArray = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument(typedArray).promise;
+      let text = '';
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const content = await page.getTextContent();
+        text += content.items.map(item => item.str).join(' ');
+        updateProgress(progressElement, Math.round((i / pdf.numPages) * 100));
+      }
+      return text;
+    }
+  </script>
+</body>
+</html>
