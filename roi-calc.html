@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Advanced ROI Calculator to calculate Return on Investment with features like inflation rate, step-up, and early withdrawals.">
+    <title>ROI Calculator - Return on Investment</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .calculator { max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; }
+        .calculator input, .calculator select { width: 100%; padding: 10px; margin: 10px 0; }
+        .calculator button { padding: 10px 20px; background: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        .ads { margin: 20px 0; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <h1>ROI Calculator</h1>
+        <label for="initialInvestment">Initial Investment ($):</label>
+        <input type="number" id="initialInvestment" placeholder="Enter initial investment">
+        
+        <label for="finalValue">Final Value ($):</label>
+        <input type="number" id="finalValue" placeholder="Enter final value">
+        
+        <label for="inflationRate">Inflation Rate (%):</label>
+        <input type="number" id="inflationRate" placeholder="Enter inflation rate">
+        
+        <label for="stepUp">Step-Up (%):</label>
+        <input type="number" id="stepUp" placeholder="Enter step-up rate">
+        
+        <label for="earlyWithdrawals">Early Withdrawals ($):</label>
+        <input type="number" id="earlyWithdrawals" placeholder="Enter early withdrawals">
+        
+        <button onclick="calculateROI()">Calculate ROI</button>
+        <h2 id="result"></h2>
+    </div>
+
+    <!-- AdSense Ad Unit -->
+    <div class="ads">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_AD_SENSE_ID" crossorigin="anonymous"></script>
+        <!-- Display Ad Unit -->
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-YOUR_AD_SENSE_ID" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <script>
+        function calculateROI() {
+            const initialInvestment = parseFloat(document.getElementById('initialInvestment').value);
+            const finalValue = parseFloat(document.getElementById('finalValue').value);
+            const inflationRate = parseFloat(document.getElementById('inflationRate').value) / 100;
+            const stepUp = parseFloat(document.getElementById('stepUp').value) / 100;
+            const earlyWithdrawals = parseFloat(document.getElementById('earlyWithdrawals').value);
+
+            const adjustedFinalValue = finalValue - earlyWithdrawals;
+            const roi = ((adjustedFinalValue - initialInvestment) / initialInvestment) * 100;
+            const adjustedROI = roi - (inflationRate * 100);
+
+            document.getElementById('result').innerText = `Adjusted ROI: ${adjustedROI.toFixed(2)}%`;
+        }
+    </script>
+</body>
+</html>
