@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Convert PDF files to Excel online. Fast, secure, and easy-to-use PDF to Excel converter." />
+  <meta name="keywords" content="PDF to Excel, PDF Converter, Online PDF Tools" />
+  <meta name="author" content="Your Company Name" />
+  <title>PDF to Excel - Online PDF Converter</title>
+  <link rel="canonical" href="https://www.yourwebsite.com/pdf-to-excel" />
+  <style>
+    /* Same CSS as above */
+  </style>
+</head>
+<body>
+  <!-- Header Ad -->
+  <div class="ad">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_AD_SENSE_ID" crossorigin="anonymous"></script>
+    <!-- Ad Unit 1 -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-YOUR_AD_SENSE_ID"
+         data-ad-slot="AD_UNIT_ID_1"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+
+  <header>
+    <h1>PDF to Excel Converter</h1>
+    <p>Convert PDF files to Excel quickly and easily.</p>
+  </header>
+
+  <div class="container">
+    <h2>Upload Your PDF File</h2>
+    <div class="tool">
+      <input type="file" id="input_pdfToExcel" accept=".pdf" />
+      <button onclick="handleConversion()">Convert to Excel</button>
+      <div class="progress" id="progress_pdfToExcel"></div>
+      <textarea id="output_pdfToExcel" readonly></textarea>
+    </div>
+  </div>
+
+  <!-- Footer Ad -->
+  <div class="ad">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_AD_SENSE_ID" crossorigin="anonymous"></script>
+    <!-- Ad Unit 2 -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-YOUR_AD_SENSE_ID"
+         data-ad-slot="AD_UNIT_ID_2"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+
+  <footer>
+    <p>&copy; 2023 Your Company Name. All rights reserved.</p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+  <script>
+    async function handleConversion() {
+      const input = document.getElementById('input_pdfToExcel');
+      const progress = document.getElementById('progress_pdfToExcel');
+      const output = document.getElementById('output_pdfToExcel');
+      const file = input.files[0];
+      if (!file) return alert('Please select a PDF file.');
+
+      progress.textContent = 'Processing: 0%';
+      try {
+        const text = await pdfToText(file, progress);
+        const rows = text.split('\n');
+        const data = rows.map(row => row.split(' '));
+        const ws = XLSX.utils.aoa_to_sheet(data);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+        XLSX.writeFile(wb, 'output.xlsx');
+        progress.textContent = 'Done!';
+        output.value = 'Excel file generated. Check your downloads.';
+      } catch (error) {
+        progress.textContent = 'Error!';
+        output.value = `Error: ${error.message}`;
+      }
+    }
+
+    function updateProgress(progressElement, percentage) {
+      progressElement.textContent = `Processing: ${percentage}%`;
+    }
+
+    async function pdfToText(file, progressElement) {
+      const typedArray = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument(typedArray).promise;
+      let text = '';
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const content = await page.getTextContent();
+        text += content.items.map(item => item.str).join(' ');
+        updateProgress(progressElement, Math.round((i / pdf.numPages) * 100));
+      }
+      return text;
+    }
+  </script>
+</body>
+</html>
