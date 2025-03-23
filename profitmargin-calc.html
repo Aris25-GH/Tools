@@ -1,116 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Profit Margin Calculator</title>
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      background-color: #f4f4f9;
-      color: #333;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .calculator-container {
-      background: #fff;
-      padding: 2rem;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      width: 100%;
-      max-width: 400px;
-    }
-    h1 {
-      text-align: center;
-      color: #4a90e2;
-      margin-bottom: 1.5rem;
-    }
-    .input-group {
-      margin-bottom: 1rem;
-    }
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: bold;
-    }
-    input {
-      width: 100%;
-      padding: 0.5rem;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      font-size: 1rem;
-    }
-    button {
-      width: 100%;
-      padding: 0.75rem;
-      background-color: #4a90e2;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    button:hover {
-      background-color: #357abd;
-    }
-    .result-container {
-      margin-top: 2rem;
-      padding: 1rem;
-      background-color: #f9f9f9;
-      border-radius: 5px;
-    }
-    .result-container h2 {
-      margin-bottom: 1rem;
-      color: #333;
-    }
-    .result-container p {
-      margin: 0.5rem 0;
-      font-size: 1rem;
-    }
-    .result-container span {
-      font-weight: bold;
-      color: #4a90e2;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Advanced Profit Margin Calculator to calculate gross profit margin, net profit margin, and operating profit margin with detailed insights.">
+    <title>Profit Margin Calculator</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .calculator { max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; }
+        .calculator input, .calculator select { width: 100%; padding: 10px; margin: 10px 0; }
+        .calculator button { padding: 10px 20px; background: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        .result { margin-top: 20px; }
+        .ads { margin: 20px 0; text-align: center; }
+    </style>
 </head>
 <body>
-  <div class="calculator-container">
-    <h1>Profit Margin Calculator</h1>
-    <form id="profit-margin-form">
-      <div class="input-group">
-        <label for="revenue">Revenue (₹):</label>
-        <input type="number" id="revenue" required>
-      </div>
-      <div class="input-group">
-        <label for="cost">Cost (₹):</label>
-        <input type="number" id="cost" required>
-      </div>
-      <button type="submit">Calculate</button>
-    </form>
-    <div id="result" class="result-container">
-      <h2>Results</h2>
-      <p><strong>Profit:</strong> <span id="profit">₹0.00</span></p>
-      <p><strong>Profit Margin (%):</strong> <span id="profit-margin">0.00</span></p>
+    <div class="calculator">
+        <h1>Profit Margin Calculator</h1>
+        
+        <label for="revenue">Total Revenue ($):</label>
+        <input type="number" id="revenue" placeholder="Enter total revenue">
+        
+        <label for="costOfGoodsSold">Cost of Goods Sold ($):</label>
+        <input type="number" id="costOfGoodsSold" placeholder="Enter cost of goods sold">
+        
+        <label for="operatingExpenses">Operating Expenses ($):</label>
+        <input type="number" id="operatingExpenses" placeholder="Enter operating expenses">
+        
+        <label for="taxes">Taxes ($):</label>
+        <input type="number" id="taxes" placeholder="Enter taxes">
+        
+        <label for="interest">Interest ($):</label>
+        <input type="number" id="interest" placeholder="Enter interest">
+        
+        <button onclick="calculateProfitMargins()">Calculate Profit Margins</button>
+        
+        <div class="result">
+            <h2>Results:</h2>
+            <p><strong>Gross Profit Margin:</strong> <span id="grossProfitMargin"></span></p>
+            <p><strong>Operating Profit Margin:</strong> <span id="operatingProfitMargin"></span></p>
+            <p><strong>Net Profit Margin:</strong> <span id="netProfitMargin"></span></p>
+        </div>
     </div>
-  </div>
-  <script>
-    document.getElementById('profit-margin-form').addEventListener('submit', function (e) {
-      e.preventDefault();
 
-      const revenue = parseFloat(document.getElementById('revenue').value);
-      const cost = parseFloat(document.getElementById('cost').value);
+    <!-- AdSense Ad Unit -->
+    <div class="ads">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_AD_SENSE_ID" crossorigin="anonymous"></script>
+        <!-- Display Ad Unit -->
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-YOUR_AD_SENSE_ID" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
 
-      const profit = revenue - cost;
-      const profitMargin = (profit / revenue) * 100;
+    <script>
+        function calculateProfitMargins() {
+            // Get input values
+            const revenue = parseFloat(document.getElementById('revenue').value);
+            const costOfGoodsSold = parseFloat(document.getElementById('costOfGoodsSold').value);
+            const operatingExpenses = parseFloat(document.getElementById('operatingExpenses').value);
+            const taxes = parseFloat(document.getElementById('taxes').value);
+            const interest = parseFloat(document.getElementById('interest').value);
 
-      document.getElementById('profit').textContent = `₹${profit.toFixed(2)}`;
-      document.getElementById('profit-margin').textContent = `${profitMargin.toFixed(2)}%`;
-    });
-  </script>
+            // Validate inputs
+            if (isNaN(revenue) || isNaN(costOfGoodsSold) || isNaN(operatingExpenses) || isNaN(taxes) || isNaN(interest)) {
+                alert("Please enter valid numbers for all fields.");
+                return;
+            }
+
+            // Calculate Gross Profit
+            const grossProfit = revenue - costOfGoodsSold;
+
+            // Calculate Operating Profit
+            const operatingProfit = grossProfit - operatingExpenses;
+
+            // Calculate Net Profit
+            const netProfit = operatingProfit - taxes - interest;
+
+            // Calculate Margins
+            const grossProfitMargin = ((grossProfit / revenue) * 100).toFixed(2);
+            const operatingProfitMargin = ((operatingProfit / revenue) * 100).toFixed(2);
+            const netProfitMargin = ((netProfit / revenue) * 100).toFixed(2);
+
+            // Display Results
+            document.getElementById('grossProfitMargin').innerText = `${grossProfitMargin}%`;
+            document.getElementById('operatingProfitMargin').innerText = `${operatingProfitMargin}%`;
+            document.getElementById('netProfitMargin').innerText = `${netProfitMargin}%`;
+        }
+    </script>
 </body>
 </html>
