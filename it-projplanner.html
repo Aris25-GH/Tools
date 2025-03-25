@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Project Planner</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #6366f1;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray-light: #f1f5f9;
+            --gray: #e2e8f0;
+            --gray-dark: #94a3b8;
+            --gray-darker: #64748b;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --radius-sm: 4px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--gray-light);
+            color: var(--dark);
+            line-height: 1.4;
+            font-size: 14px;
+            padding: 12px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1, h2 {
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        h2 {
+            font-size: 16px;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-sm);
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+
+        .grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .grid-cols-2 {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        @media (max-width: 768px) {
+            .grid-cols-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 500;
+            color: var(--gray-darker);
+            font-size: 13px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--gray);
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            background: var(--white);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 2px rgba(99,102,241,0.1);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            font-weight: 500;
+            font-size: 13px;
+            cursor: pointer;
+            border: none;
+            gap: 6px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-light);
+        }
+
+        .btn-sm {
+            padding: 6px 10px;
+        }
+
+        .btn-icon {
+            width: 28px;
+            height: 28px;
+            padding: 0;
+            border-radius: 50%;
+        }
+
+        .icon {
+            width: 14px;
+            height: 14px;
+        }
+
+        .icon-primary {
+            color: var(--primary);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--gray);
+            margin-bottom: 12px;
+        }
+
+        .tab {
+            padding: 8px 12px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--gray-darker);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Gantt Chart */
+        .gantt-container {
+            border: 1px solid var(--gray);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+        }
+
+        .gantt-header {
+            display: grid;
+            grid-template-columns: 160px 1fr;
+            background: var(--gray-light);
+            border-bottom: 1px solid var(--gray);
+        }
+
+        .gantt-header-item {
+            padding: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--gray-darker);
+        }
+
+        .gantt-body {
+            display: grid;
+            grid-template-columns: 160px 1fr;
+        }
+
+        .task-list {
+            background: var(--white);
+        }
+
+        .task-item {
+            padding: 8px;
+            border-bottom: 1px solid var(--gray-light);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+        }
+
+        .task-name {
+            font-weight: 500;
+        }
+
+        .task-supplier {
+            font-size: 11px;
+            color: var(--gray-darker);
+            background: var(--gray-light);
+            padding: 2px 6px;
+            border-radius: var(--radius-sm);
+            margin-left: auto;
+        }
+
+        .timeline-container {
+            overflow-x: auto;
+        }
+
+        .timeline-header {
+            display: flex;
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .timeline-header-day {
+            min-width: 40px;
+            padding: 8px 4px;
+            font-size: 11px;
+            text-align: center;
+            color: var(--gray-darker);
+            border-right: 1px solid var(--gray-light);
+        }
+
+        .timeline {
+            position: relative;
+            height: 100%;
+            min-height: 300px;
+            background: var(--white);
+        }
+
+        .timeline-bar {
+            position: absolute;
+            height: 16px;
+            border-radius: var(--radius-sm);
+            margin-top: 4px;
+            cursor: pointer;
+        }
+
+        .timeline-bar-delivery {
+            background: var(--gray-dark);
+        }
+
+        .timeline-bar-installation {
+            background: var(--info);
+        }
+
+        .timeline-bar-commissioning {
+            background: var(--success);
+        }
+
+        .timeline-bar-testing {
+            background: var(--danger);
+        }
+
+        .threshold-indicator {
+            position: absolute;
+            top: -3px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--danger);
+            border: 2px solid var(--white);
+        }
+
+        /* Charts */
+        .chart-container {
+            height: 200px;
+            width: 100%;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 24px;
+            color: var(--gray-dark);
+        }
+
+        .empty-state-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+            color: var(--gray);
+        }
+
+        /* Compact Date Grid */
+        .date-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .date-group {
+            display: grid;
+            gap: 8px;
+        }
+
+        .date-label {
+            font-size: 11px;
+            color: var(--gray-darker);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Supplier Items */
+        .supplier-items {
+            margin-top: 8px;
+        }
+
+        .supplier-item {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .supplier-item-input {
+            flex: 1;
+        }
+
+        .supplier-type-select {
+            width: 120px;
+        }
+
+        .remove-item-btn {
+            background: none;
+            border: none;
+            color: var(--danger);
+            cursor: pointer;
+            padding: 0 4px;
+        }
+
+        .add-item-btn {
+            font-size: 12px;
+            padding: 4px 8px;
+            margin-top: 4px;
+        }
+
+        /* Supplier Details */
+        .supplier-details {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--gray-light);
+        }
+
+        .supplier-detail-item {
+            font-size: 12px;
+            margin-bottom: 4px;
+            display: flex;
+        }
+
+        .supplier-detail-label {
+            font-weight: 500;
+            min-width: 80px;
+            color: var(--gray-darker);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>
+            <i class="fas fa-project-diagram icon icon-primary"></i>
+            IT Project Planner
+        </h1>
+
+        <div class="tabs">
+            <div class="tab active" data-tab="planning">
+                <i class="fas fa-tasks icon"></i>
+                Planning
+            </div>
+            <div class="tab" data-tab="timeline">
+                <i class="fas fa-chart-gantt icon"></i>
+                Timeline
+            </div>
+            <div class="tab" data-tab="analytics">
+                <i class="fas fa-chart-line icon"></i>
+                Analytics
+            </div>
+            <div class="tab" data-tab="suppliers">
+                <i class="fas fa-warehouse icon"></i>
+                Suppliers
+            </div>
+        </div>
+
+        <div id="planning" class="tab-content active">
+            <div class="grid grid-cols-2">
+                <div class="card">
+                    <h2>
+                        <i class="fas fa-truck icon icon-primary"></i>
+                        New Task
+                    </h2>
+                    <form id="add-task-form">
+                        <div class="form-group">
+                            <label for="task-name">Task Name</label>
+                            <input type="text" id="task-name" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="supplier">Supplier</label>
+                            <select id="supplier" class="form-control" required>
+                                <option value="">Select Supplier</option>
+                            </select>
+                        </div>
+
+                        <div class="date-grid">
+                            <div class="date-group">
+                                <div class="date-label">
+                                    <i class="fas fa-truck icon"></i>
+                                    Delivery
+                                </div>
+                                <input type="date" id="delivery-date" class="form-control" required>
+                                <input type="date" id="delivery-threshold" class="form-control" required placeholder="Threshold">
+                            </div>
+
+                            <div class="date-group">
+                                <div class="date-label">
+                                    <i class="fas fa-tools icon"></i>
+                                    Installation
+                                </div>
+                                <input type="date" id="installation-date" class="form-control" required>
+                                <input type="date" id="installation-threshold" class="form-control" required placeholder="Threshold">
+                            </div>
+
+                            <div class="date-group">
+                                <div class="date-label">
+                                    <i class="fas fa-cogs icon"></i>
+                                    Commissioning
+                                </div>
+                                <input type="date" id="commissioning-date" class="form-control" required>
+                                <input type="date" id="commissioning-threshold" class="form-control" required placeholder="Threshold">
+                            </div>
+
+                            <div class="date-group">
+                                <div class="date-label">
+                                    <i class="fas fa-vial icon"></i>
+                                    Testing
+                                </div>
+                                <input type="date" id="testing-date" class="form-control" required>
+                                <input type="date" id="testing-threshold" class="form-control" required placeholder="Threshold">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="notes">
+                                <i class="fas fa-sticky-note icon"></i>
+                                Notes
+                            </label>
+                            <textarea id="notes" class="form-control" rows="3"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-plus icon"></i>
+                            Add Task
+                        </button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h2>
+                        <i class="fas fa-tasks icon icon-primary"></i>
+                        Active Tasks
+                    </h2>
+                    <div id="active-tasks-list" style="max-height: 500px; overflow-y: auto;">
+                        <!-- Tasks will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="timeline" class="tab-content">
+            <div class="card">
+                <h2>
+                    <i class="fas fa-chart-gantt icon icon-primary"></i>
+                    Project Timeline
+                </h2>
+                <div class="gantt-container">
+                    <div class="gantt-header">
+                        <div class="gantt-header-item">Tasks</div>
+                        <div class="gantt-header-item">Timeline</div>
+                    </div>
+                    <div class="gantt-body">
+                        <div class="task-list">
+                            <ul id="task-list"></ul>
+                        </div>
+                        <div class="timeline-container">
+                            <div class="timeline-header" id="timeline-header"></div>
+                            <div class="timeline" id="timeline"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="analytics" class="tab-content">
+            <div class="grid grid-cols-2">
+                <div class="card">
+                    <h2>
+                        <i class="fas fa-chart-line icon icon-primary"></i>
+                        Task Duration
+                    </h2>
+                    <div class="chart-container">
+                        <canvas id="taskDurationLineChart"></canvas>
+                    </div>
+                </div>
+                <div class="card">
+                    <h2>
+                        <i class="fas fa-chart-bar icon icon-primary"></i>
+                        Progress Status
+                    </h2>
+                    <div class="chart-container">
+                        <canvas id="taskDurationBarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="suppliers" class="tab-content">
+            <div class="grid grid-cols-2">
+                <div class="card">
+                    <h2>
+                        <i class="fas fa-warehouse icon icon-primary"></i>
+                        Add New Supplier
+                    </h2>
+                    <form id="supplier-form">
+                        <div class="form-group">
+                            <label for="supplier-name">Supplier Name</label>
+                            <input type="text" id="supplier-name" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="supplier-contact">Contact Person</label>
+                            <input type="text" id="supplier-contact" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="supplier-email">Email</label>
+                            <input type="email" id="supplier-email" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="supplier-phone">Phone</label>
+                            <input type="tel" id="supplier-phone" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Items Supplied</label>
+                            <div class="supplier-items" id="supplier-items-container">
+                                <div class="supplier-item">
+                                    <select class="form-control supplier-type-select">
+                                        <option value="hardware">Hardware</option>
+                                        <option value="software">Software</option>
+                                        <option value="service">Service</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                    <input type="text" class="form-control supplier-item-input" placeholder="Item name">
+                                    <button type="button" class="remove-item-btn">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-sm add-item-btn" id="add-supplier-item">
+                                <i class="fas fa-plus icon"></i>
+                                Add Item
+                            </button>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-plus icon"></i>
+                            Add Supplier
+                        </button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h2>
+                        <i class="fas fa-list icon icon-primary"></i>
+                        Supplier Directory
+                    </h2>
+                    <div id="suppliers-list" style="max-height: 500px; overflow-y: auto;">
+                        <!-- Suppliers will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const addTaskForm = document.getElementById('add-task-form');
+        const supplierForm = document.getElementById('supplier-form');
+        const supplierNameInput = document.getElementById('supplier-name');
+        const supplierDropdown = document.getElementById('supplier');
+        const taskList = document.getElementById('task-list');
+        const timelineHeader = document.getElementById('timeline-header');
+        const timeline = document.getElementById('timeline');
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const taskDurationLineChartCtx = document.getElementById('taskDurationLineChart').getContext('2d');
+        const taskDurationBarChartCtx = document.getElementById('taskDurationBarChart').getContext('2d');
+        const addSupplierItemBtn = document.getElementById('add-supplier-item');
+        const supplierItemsContainer = document.getElementById('supplier-items-container');
+        const suppliersList = document.getElementById('suppliers-list');
+        const activeTasksList = document.getElementById('active-tasks-list');
+
+        // Data
+        let tasks = [];
+        let suppliers = [];
+        let taskDurationLineChart;
+        let taskDurationBarChart;
+
+        // Supplier types
+        const supplierTypes = {
+            hardware: { name: "Hardware", icon: "fa-microchip", color: "#3b82f6" },
+            software: { name: "Software", icon: "fa-code", color: "#10b981" },
+            service: { name: "Service", icon: "fa-headset", color: "#f59e0b" },
+            other: { name: "Other", icon: "fa-box", color: "#94a3b8" }
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            setupEventListeners();
+            setupTabs();
+            renderGanttChart();
+            renderSuppliersList();
+            renderActiveTasks();
+        });
+
+        function setupTabs() {
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    tab.classList.add('active');
+                    document.getElementById(tab.getAttribute('data-tab')).classList.add('active');
+                });
+            });
+        }
+
+        function loadData() {
+            const savedTasks = localStorage.getItem('itProjectTasks');
+            const savedSuppliers = localStorage.getItem('itProjectSuppliers');
+            if (savedTasks) tasks = JSON.parse(savedTasks);
+            if (savedSuppliers) {
+                suppliers = JSON.parse(savedSuppliers);
+                populateSupplierDropdown();
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem('itProjectTasks', JSON.stringify(tasks));
+            localStorage.setItem('itProjectSuppliers', JSON.stringify(suppliers));
+        }
+
+        function setupEventListeners() {
+            addTaskForm.addEventListener('submit', handleAddTask);
+            supplierForm.addEventListener('submit', handleAddSupplier);
+            addSupplierItemBtn.addEventListener('click', addSupplierItem);
+            
+            // Event delegation for remove item buttons
+            supplierItemsContainer.addEventListener('click', (e) => {
+                if (e.target.closest('.remove-item-btn')) {
+                    const item = e.target.closest('.supplier-item');
+                    if (supplierItemsContainer.children.length > 1) {
+                        item.remove();
+                    } else {
+                        // Reset the single remaining item instead of removing it
+                        item.querySelector('.supplier-type-select').value = 'hardware';
+                        item.querySelector('.supplier-item-input').value = '';
+                    }
+                }
+            });
+        }
+
+        function addSupplierItem() {
+            const newItem = document.createElement('div');
+            newItem.className = 'supplier-item';
+            newItem.innerHTML = `
+                <select class="form-control supplier-type-select">
+                    <option value="hardware">Hardware</option>
+                    <option value="software">Software</option>
+                    <option value="service">Service</option>
+                    <option value="other">Other</option>
+                </select>
+                <input type="text" class="form-control supplier-item-input" placeholder="Item name">
+                <button type="button" class="remove-item-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            supplierItemsContainer.appendChild(newItem);
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toISOString().split('T')[0];
+        }
+
+        function dateDiffInDays(startDate, endDate) {
+            return Math.round((new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24));
+        }
+
+        function populateSupplierDropdown() {
+            supplierDropdown.innerHTML = '<option value="">Select Supplier</option>';
+            suppliers.forEach(supplier => {
+                const option = document.createElement('option');
+                option.value = supplier.id;
+                option.textContent = supplier.name;
+                supplierDropdown.appendChild(option);
+            });
+        }
+
+        function handleAddSupplier(e) {
+            e.preventDefault();
+            
+            // Get all items
+            const items = [];
+            const itemElements = supplierItemsContainer.querySelectorAll('.supplier-item');
+            itemElements.forEach(item => {
+                const type = item.querySelector('.supplier-type-select').value;
+                const name = item.querySelector('.supplier-item-input').value.trim();
+                if (name) {
+                    items.push({ type, name });
+                }
+            });
+
+            if (items.length === 0) {
+                alert('Please add at least one supplied item');
+                return;
+            }
+
+            const supplierData = {
+                id: Date.now().toString(),
+                name: supplierNameInput.value.trim(),
+                contact: document.getElementById('supplier-contact').value.trim(),
+                email: document.getElementById('supplier-email').value.trim(),
+                phone: document.getElementById('supplier-phone').value.trim(),
+                items: items
+            };
+
+            if (!supplierData.name) {
+                alert('Please enter supplier name');
+                return;
+            }
+
+            suppliers.push(supplierData);
+            saveData();
+            populateSupplierDropdown();
+            renderSuppliersList();
+            supplierForm.reset();
+            
+            // Reset items to one empty item
+            supplierItemsContainer.innerHTML = `
+                <div class="supplier-item">
+                    <select class="form-control supplier-type-select">
+                        <option value="hardware">Hardware</option>
+                        <option value="software">Software</option>
+                        <option value="service">Service</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <input type="text" class="form-control supplier-item-input" placeholder="Item name">
+                    <button type="button" class="remove-item-btn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+
+            alert('Supplier added successfully');
+        }
+
+        function renderSuppliersList() {
+            suppliersList.innerHTML = '';
+            
+            if (suppliers.length === 0) {
+                suppliersList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">
+                            <i class="fas fa-warehouse"></i>
+                        </div>
+                        <h3>No suppliers</h3>
+                        <p>Add suppliers to see them listed here</p>
+                    </div>
+                `;
+                return;
+            }
+
+            suppliers.forEach(supplier => {
+                const supplierCard = document.createElement('div');
+                supplierCard.className = 'card';
+                supplierCard.style.marginBottom = '8px';
+                
+                let itemsHtml = '';
+                supplier.items.forEach(item => {
+                    const typeInfo = supplierTypes[item.type];
+                    itemsHtml += `
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                            <i class="fas ${typeInfo.icon}" style="color: ${typeInfo.color}; width: 14px;"></i>
+                            <span style="font-size: 12px;">${item.name}</span>
+                            <span style="font-size: 11px; color: var(--gray-darker); margin-left: auto;">${typeInfo.name}</span>
+                        </div>
+                    `;
+                });
+
+                supplierCard.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h3 style="font-size: 14px; margin-bottom: 8px;">${supplier.name}</h3>
+                        <button class="btn btn-sm" onclick="deleteSupplier('${supplier.id}')" style="padding: 2px 6px;">
+                            <i class="fas fa-trash" style="font-size: 12px;"></i>
+                        </button>
+                    </div>
+                    <div class="supplier-details">
+                        ${supplier.contact ? `
+                            <div class="supplier-detail-item">
+                                <span class="supplier-detail-label">Contact:</span>
+                                <span>${supplier.contact}</span>
+                            </div>
+                        ` : ''}
+                        ${supplier.email ? `
+                            <div class="supplier-detail-item">
+                                <span class="supplier-detail-label">Email:</span>
+                                <span>${supplier.email}</span>
+                            </div>
+                        ` : ''}
+                        ${supplier.phone ? `
+                            <div class="supplier-detail-item">
+                                <span class="supplier-detail-label">Phone:</span>
+                                <span>${supplier.phone}</span>
+                            </div>
+                        ` : ''}
+                        <div class="supplier-detail-item" style="margin-top: 8px;">
+                            <span class="supplier-detail-label">Items:</span>
+                            <div style="flex: 1;">
+                                ${itemsHtml}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                suppliersList.appendChild(supplierCard);
+            });
+        }
+
+        function deleteSupplier(supplierId) {
+            if (confirm('Are you sure you want to delete this supplier?')) {
+                suppliers = suppliers.filter(s => s.id !== supplierId);
+                saveData();
+                populateSupplierDropdown();
+                renderSuppliersList();
+                
+                // Check if any tasks use this supplier
+                const tasksUsingSupplier = tasks.filter(t => t.supplierId === supplierId);
+                if (tasksUsingSupplier.length > 0) {
+                    alert(`Note: ${tasksUsingSupplier.length} task(s) are associated with this supplier. They will now show as "Supplier not found".`);
+                }
+            }
+        }
+
+        function renderActiveTasks() {
+            activeTasksList.innerHTML = '';
+            
+            if (tasks.length === 0) {
+                activeTasksList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <h3>No tasks</h3>
+                        <p>Add tasks to see them listed here</p>
+                    </div>
+                `;
+                return;
+            }
+
+            tasks.forEach(task => {
+                const taskCard = document.createElement('div');
+                taskCard.className = 'card';
+                taskCard.style.marginBottom = '8px';
+                
+                const supplier = suppliers.find(s => s.id === task.supplierId);
+                const supplierName = supplier ? supplier.name : 'Supplier not found';
+                
+                taskCard.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <h3 style="font-size: 14px;">${task.taskName}</h3>
+                        <span style="font-size: 11px; background: var(--gray-light); padding: 2px 6px; border-radius: var(--radius-sm);">
+                            ${supplierName}
+                        </span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--gray-darker);">
+                        <span>Start: ${task.deliveryDate}</span>
+                        <span>End: ${task.testingDate}</span>
+                    </div>
+                `;
+                
+                activeTasksList.appendChild(taskCard);
+            });
+        }
+
+        function handleAddTask(e) {
+            e.preventDefault();
+
+            const taskData = {
+                taskName: document.getElementById('task-name').value,
+                supplierId: supplierDropdown.value,
+                deliveryDate: document.getElementById('delivery-date').value,
+                installationDate: document.getElementById('installation-date').value,
+                commissioningDate: document.getElementById('commissioning-date').value,
+                testingDate: document.getElementById('testing-date').value,
+                notes: document.getElementById('notes').value,
+                deliveryThreshold: document.getElementById('delivery-threshold').value,
+                installationThreshold: document.getElementById('installation-threshold').value,
+                commissioningThreshold: document.getElementById('commissioning-threshold').value,
+                testingThreshold: document.getElementById('testing-threshold').value
+            };
+
+            // Validate
+            if (!taskData.taskName || !taskData.supplierId || 
+                !taskData.deliveryDate || !taskData.installationDate || 
+                !taskData.commissioningDate || !taskData.testingDate) {
+                alert('Fill all required fields');
+                return;
+            }
+
+            // Validate dates
+            const dates = [
+                taskData.deliveryDate,
+                taskData.installationDate,
+                taskData.commissioningDate,
+                taskData.testingDate
+            ];
+            
+            for (let i = 0; i < dates.length - 1; i++) {
+                if (new Date(dates[i]) > new Date(dates[i + 1])) {
+                    const phaseNames = ['Delivery', 'Installation', 'Commissioning', 'Testing'];
+                    alert(`${phaseNames[i]} must be before ${phaseNames[i+1]}`);
+                    return;
+                }
+            }
+
+            // Format dates
+            taskData.deliveryDate = formatDate(taskData.deliveryDate);
+            taskData.installationDate = formatDate(taskData.installationDate);
+            taskData.commissioningDate = formatDate(taskData.commissioningDate);
+            taskData.testingDate = formatDate(taskData.testingDate);
+
+            tasks.push(taskData);
+            saveData();
+            renderGanttChart();
+            renderActiveTasks();
+            addTaskForm.reset();
+
+            alert('Task added');
+        }
+
+        function renderGanttChart() {
+            taskList.innerHTML = '';
+            timelineHeader.innerHTML = '';
+            timeline.innerHTML = '';
+
+            if (tasks.length === 0) {
+                timeline.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">
+                            <i class="fas fa-chart-gantt"></i>
+                        </div>
+                        <h3>No tasks</h3>
+                        <p>Add tasks to see timeline</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const projectStartDate = new Date(Math.min(...tasks.map(t => new Date(t.deliveryDate))));
+            const projectEndDate = new Date(Math.max(...tasks.map(t => new Date(t.testingDate))));
+            const totalDays = dateDiffInDays(projectStartDate, projectEndDate);
+
+            // Timeline header
+            for (let i = 0; i <= totalDays; i++) {
+                const day = new Date(projectStartDate);
+                day.setDate(day.getDate() + i);
+                const headerCell = document.createElement('div');
+                headerCell.className = 'timeline-header-day';
+                headerCell.textContent = day.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
+                headerCell.style.minWidth = '40px';
+                timelineHeader.appendChild(headerCell);
+            }
+
+            // Chart data
+            const chartData = {
+                labels: [],
+                durations: [],
+                statuses: []
+            };
+
+            // Create tasks
+            tasks.forEach(task => {
+                const supplier = suppliers.find(s => s.id === task.supplierId);
+                const supplierName = supplier ? supplier.name : 'Supplier not found';
+
+                // Task list item
+                const listItem = document.createElement('li');
+                listItem.className = 'task-item';
+                listItem.innerHTML = `
+                    <i class="fas fa-tasks icon"></i>
+                    <span class="task-name">${task.taskName}</span>
+                    <span class="task-supplier">${supplierName}</span>
+                `;
+                taskList.appendChild(listItem);
+
+                // Timeline bars
+                const phases = [
+                    { 
+                        name: 'Delivery', 
+                        start: task.deliveryDate, 
+                        end: task.installationDate, 
+                        color: 'delivery',
+                        threshold: task.deliveryThreshold
+                    },
+                    { 
+                        name: 'Installation', 
+                        start: task.installationDate, 
+                        end: task.commissioningDate, 
+                        color: 'installation',
+                        threshold: task.installationThreshold
+                    },
+                    { 
+                        name: 'Commissioning', 
+                        start: task.commissioningDate, 
+                        end: task.testingDate, 
+                        color: 'commissioning',
+                        threshold: task.commissioningThreshold
+                    },
+                    { 
+                        name: 'Testing', 
+                        start: task.testingDate, 
+                        end: task.testingDate, 
+                        color: 'testing',
+                        threshold: task.testingThreshold
+                    }
+                ];
+
+                phases.forEach(phase => {
+                    const start = new Date(phase.start);
+                    const end = new Date(phase.end);
+                    const daysFromStart = dateDiffInDays(projectStartDate, start);
+                    const duration = dateDiffInDays(start, end) || 1; // Min 1 day
+
+                    const bar = document.createElement('div');
+                    bar.className = `timeline-bar timeline-bar-${phase.color}`;
+                    bar.style.left = `${daysFromStart * 40}px`;
+                    bar.style.width = `${duration * 40}px`;
+                    bar.title = `${phase.name}: ${phase.start} to ${phase.end}`;
+                    timeline.appendChild(bar);
+
+                    // Threshold indicator
+                    if (phase.threshold) {
+                        const threshold = new Date(phase.threshold);
+                        if (end > threshold) {
+                            const thresholdDays = dateDiffInDays(projectStartDate, threshold);
+                            const indicator = document.createElement('div');
+                            indicator.className = 'threshold-indicator';
+                            indicator.style.left = `${thresholdDays * 40}px`;
+                            bar.appendChild(indicator);
+                        }
+                    }
+                });
+
+                // Chart data
+                chartData.labels.push(task.taskName);
+                chartData.durations.push(dateDiffInDays(task.deliveryDate, task.testingDate));
+                
+                // Status (simplified)
+                const today = new Date();
+                const testingDate = new Date(task.testingDate);
+                chartData.statuses.push(today > testingDate ? 4 : 3); // 4=Completed, 3=On track
+            });
+
+            updateCharts(chartData);
+        }
+
+        function updateCharts(data) {
+            // Line Chart
+            if (taskDurationLineChart) {
+                taskDurationLineChart.data.labels = data.labels;
+                taskDurationLineChart.data.datasets[0].data = data.durations;
+                taskDurationLineChart.update();
+            } else {
+                taskDurationLineChart = new Chart(taskDurationLineChartCtx, {
+                    type: 'line',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'Duration (days)',
+                            data: data.durations,
+                            borderColor: '#4f46e5',
+                            backgroundColor: 'rgba(79,70,229,0.1)',
+                            borderWidth: 2,
+                            tension: 0.3,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { beginAtZero: true, grid: { drawBorder: false } },
+                            x: { grid: { display: false } }
+                        }
+                    }
+                });
+            }
+
+            // Bar Chart
+            if (taskDurationBarChart) {
+                taskDurationBarChart.data.labels = data.labels;
+                taskDurationBarChart.data.datasets[0].data = data.statuses;
+                taskDurationBarChart.update();
+            } else {
+                taskDurationBarChart = new Chart(taskDurationBarChartCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            data: data.statuses,
+                            backgroundColor: data.statuses.map(s => 
+                                s === 4 ? '#3b82f6' : '#10b981'), // Blue=Completed, Green=On track
+                            borderRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { 
+                                beginAtZero: true,
+                                max: 4,
+                                ticks: { 
+                                    callback: v => v === 4 ? 'Completed' : 'On Track' 
+                                },
+                                grid: { drawBorder: false } 
+                            },
+                            x: { grid: { display: false } }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Make deleteSupplier available globally
+        window.deleteSupplier = deleteSupplier;
+    </script>
+</body>
+</html>
